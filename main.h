@@ -1,0 +1,32 @@
+#include <exec/libraries.h>
+
+#include <proto/locale.h>
+
+// integer types
+
+typedef signed char int8;
+typedef unsigned char uint8;
+typedef signed short int16;
+typedef unsigned short uint16;
+typedef signed long int32;
+typedef unsigned long uint32;
+
+// global library bases
+
+extern Library
+	*SysBase,
+	*DOSBase,
+	*IFFParseBase;
+
+// locale stuff
+
+extern Library *LocaleBase;
+extern Catalog *Cat;
+extern Locale *Loc;
+
+static inline char* LS(LONG id, char* defstr)
+{
+	return (Cat ? GetCatalogStr(Cat, id, defstr) : defstr);
+}
+
+#define MSG_NO_IFFPARSE_LIBRARY                 0
