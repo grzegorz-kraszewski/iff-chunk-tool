@@ -8,7 +8,7 @@
 #include "application.h"
 
 
-Library *IFFParseBase, *LocaleBase;
+Library *IFFParseBase, *LocaleBase, *UtilityBase;
 Catalog *Cat;
 
 //=============================================================================
@@ -48,24 +48,28 @@ int32 Main(WBStartup *wbmsg)
 		Cat = OpenCatalogA(NULL, "iffchunktool.catalog", NULL);
 	}
 
-	if (IFFParseBase = OpenLibrary("iffparse.library", 39))
+	if (UtilityBase = OpenLibrary("utility.library", 39))
 	{
-		CallArgs args;
-
-		if (args.ready)
+		if (IFFParseBase = OpenLibrary("iffparse.library", 39))
 		{
-			Application app(args);
+			CallArgs args;
 
-			if (app.ready)
+			if (args.ready)
 			{
-				result = app.Process() ? RETURN_OK : RETURN_ERROR;
-			}
-		}
+				Application app(args);
 
-		result = RETURN_OK;
-		CloseLibrary(IFFParseBase);
+				if (app.ready)
+				{
+					app.Process();
+				}
+			}
+	
+			result = RETURN_OK;
+			CloseLibrary(IFFParseBase);
+		}
+		else Problem(LS(MSG_NO_IFFPARSE_LIBRARY, "Can't open iffparse.library v39+"));
 	}
-	else Problem(LS(MSG_NO_IFFPARSE_LIBRARY, "Can't open iffparse.library v39+"));
+	else Problem(LS(MSG_NO_UTILITY_LIBRARY, "Can't open utility.library v39+"));
 
 	if (LocaleBase)
 	{

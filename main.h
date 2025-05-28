@@ -27,7 +27,8 @@ typedef unsigned long uint32;
 extern Library
 	*SysBase,
 	*DOSBase,
-	*IFFParseBase;
+	*IFFParseBase,
+	*UtilityBase;
 
 //=================
 // error reporting
@@ -49,7 +50,9 @@ static inline const char* LS(int32 id, const char* defstr)
 }
 
 #define MSG_NO_IFFPARSE_LIBRARY                 0
-#define MSG_COMMANDLINE_ARGS                    1
-#define MSG_OUT_OF_MEMORY                       2
+#define MSG_NO_UTILITY_LIBRARY                  1
+#define MSG_COMMANDLINE_ARGS                    2
+#define MSG_OUT_OF_MEMORY                       3
+#define MSG_ARGS_UNKNOWN_MODE                   4
 
 #endif    /* IFFCHUNKTOOL_MAIN_H */

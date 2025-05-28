@@ -6,22 +6,47 @@
 
 #include <proto/dos.h>
 #include <proto/iffparse.h>
+#include <proto/utility.h>
+
 
 //=============================================================================
-// Application::Application()
+// Application::Process()
 //=============================================================================
 
-Application::Application(CallArgs &args) : arguments(args), ready(FALSE)
+void Application::Process()
 {
-	if (reader.OpenFile(args.getString(0)))
-	{
-		if (writer.OpenFile(args.getString(1)))
-		{
-			char type[6];
+	const char *mode = arguments.getString(ARG_MODE);
 
-			Printf("\"%s\": source IFF form of type '%s'.\n", reader.FileName(),
-				IDtoStr(reader.iffType, type));
-			ready = TRUE;
-		}
+	if (Stricmp(mode, "LIST") == 0)
+	{
+		return;
 	}
+
+	if (Stricmp(mode, "APPEND") == 0)
+	{
+		return;
+	}
+
+	if (Stricmp(mode, "INSERT") == 0)
+	{
+		return;
+	}
+
+	if (Stricmp(mode, "REPLACE") == 0)
+	{
+		return;
+	}
+
+	if (Stricmp(mode, "REMOVE") == 0)
+	{
+		return;
+	}
+
+	if (Stricmp(mode, "EXTRACT") == 0)
+	{
+		return;
+	}
+
+	Problem(LS(MSG_ARGS_UNKNOWN_MODE, "Commandline arguments: unknown "
+		"operation mode"));
 }

@@ -8,14 +8,12 @@
 
 class Application
 {
-	IFFReader reader;
-	IFFWriter writer;
 	CallArgs &arguments;
 
 	public:
 
 	bool ready;
-	Application(CallArgs &args);
-	bool Process() {}
+	Application(CallArgs &args) : arguments(args), ready(TRUE);
+	void Process();
 	~Application() {}
 };
