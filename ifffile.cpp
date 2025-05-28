@@ -29,7 +29,6 @@ bool IFFFile::OpenFile(const char *filepath, int32 mode)
 
 			if (iffError == 0)
 			{
-				Printf("IFF '%s', opened, iff = $%08lx.\n", path, iff);
 				opened = TRUE;
 				return TRUE;
 			}

@@ -13,6 +13,8 @@
 
 bool IFFReader::OpenFile(const char *filepath)
 {
+	iffType = 0;
+
 	if (IFFFile::OpenFile(filepath, MODE_OLDFILE))
 	{
 		int32 iffError;
@@ -26,16 +28,12 @@ bool IFFReader::OpenFile(const char *filepath)
 
 			if (cn->cn_ID == ID_FORM)
 			{
-				char type[6];
-
-				IDtoStr(cn->cn_Type, type);
-				Printf("\"%s\": IFF FORM of type '%s', %ld bytes.\n", path,
-					type, cn->cn_Size);
+				iffType = cn->cn_Type;
 				return TRUE;
 			}
-			else Problem("IFF file is not FORM.");
+			else return Problem("IFF file is not FORM");
 		}
 		else return IFFProblem();
 	}
-	return FALSE;
+	else return FALSE;
 }
