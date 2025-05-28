@@ -58,10 +58,7 @@ int32 Main(WBStartup *wbmsg)
 			{
 				Application app(args);
 
-				if (app.ready)
-				{
-					app.Process();
-				}
+				if (app.Process()) result = RETURN_OK;
 			}
 	
 			result = RETURN_OK;
