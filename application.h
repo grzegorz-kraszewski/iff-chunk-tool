@@ -17,7 +17,9 @@ class Application
 	bool InsertChunk();
 	bool ReplaceChunk();
 	bool RemoveChunk();
-	bool ExtractChunk();
+	bool ExtractChunk(uint32 id);
+	uint32 ValidateChunkID(const char *str);
+	bool WriteChunkContents(ContextNode *cn);
 
 	public:
 

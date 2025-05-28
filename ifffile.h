@@ -31,7 +31,7 @@ class IFFFile
 	IFFFile() : handle(NULL), path(NULL), iff(NULL), opened(FALSE) {}
 	bool OpenFile(const char *filepath, int32 mode);
 	const char* FileName() { return path; }
-	bool IFFProblem() { return Problem("arghh"); }
+	bool IFFProblem(int32 error) { return Problem("arghh"); }
 	~IFFFile();
 };
 

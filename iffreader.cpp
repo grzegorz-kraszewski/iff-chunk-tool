@@ -33,7 +33,7 @@ bool IFFReader::OpenFile(const char *filepath)
 			}
 			else return Problem("IFF file is not FORM");
 		}
-		else return IFFProblem();
+		else return IFFProblem(iffError);
 	}
 	else return FALSE;
 }

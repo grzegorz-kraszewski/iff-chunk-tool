@@ -32,7 +32,7 @@ bool IFFFile::OpenFile(const char *filepath, int32 mode)
 				opened = TRUE;
 				return TRUE;
 			}
-			else return IFFProblem();
+			else return IFFProblem(iffError);
 		}
 		else return FileProblem();
 	}
