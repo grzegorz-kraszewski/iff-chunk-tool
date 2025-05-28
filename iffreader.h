@@ -10,8 +10,5 @@ class IFFReader : public IFFFile
 {
 	public:
 
-	bool OpenFile(const char *filepath)
-	{
-		return IFFFile::OpenFile(filepath, MODE_OLDFILE);
-	}
+	bool OpenFile(const char *filepath);
 };

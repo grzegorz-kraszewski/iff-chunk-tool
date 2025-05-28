@@ -50,5 +50,6 @@ static inline const char* LS(int32 id, const char* defstr)
 
 #define MSG_NO_IFFPARSE_LIBRARY                 0
 #define MSG_COMMANDLINE_ARGS                    1
+#define MSG_OUT_OF_MEMORY                       2
 
 #endif    /* IFFCHUNKTOOL_MAIN_H */

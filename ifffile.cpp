@@ -6,6 +6,7 @@
 #include "ifffile.h"
 
 #include <proto/dos.h>
+#include <proto/iffparse.h>
 
 //=============================================================================
 // IFFFile::OpenFile
@@ -15,8 +16,28 @@ bool IFFFile::OpenFile(const char *filepath, int32 mode)
 {
 	path = filepath;
 
-	if (handle = Open(filepath, mode)) return TRUE;
-	else return FileProblem();
+	if (iff = AllocIFF())
+	{
+		if (handle = Open(filepath, mode))
+		{
+			int32 iffError;
+
+			iff->iff_Stream = handle;
+			InitIFFasDOS(iff);
+			iffError = OpenIFF(iff, (mode == MODE_OLDFILE) ? IFFF_READ :
+				IFFF_WRITE);
+
+			if (iffError == 0)
+			{
+				Printf("IFF '%s', opened, iff = $%08lx.\n", path, iff);
+				opened = TRUE;
+				return TRUE;
+			}
+			else return IFFProblem();
+		}
+		else return FileProblem();
+	}
+	else return Problem(LS(MSG_OUT_OF_MEMORY, "Out of memory"));
 }
 
 //=============================================================================
@@ -25,8 +46,12 @@ bool IFFFile::OpenFile(const char *filepath, int32 mode)
 
 IFFFile::~IFFFile()
 {
+	if (opened) CloseIFF(iff);
+
 	if (handle)
 	{
 		if (!Close(handle)) FileProblem();
 	}
+
+	if (iff) FreeIFF(iff);
 }
