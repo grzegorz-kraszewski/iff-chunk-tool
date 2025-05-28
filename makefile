@@ -3,7 +3,7 @@ LD = g++
 CFLAGS = -nostdlib -O2 -fbaserel -fomit-frame-pointer -mregparm -fno-exceptions -fno-rtti -D__NOLIBBASE__
 LDFLAGS = -nostdlib -fbaserel -fomit-frame-pointer -nostartfiles
 LIBS =
-OBJS = start.o main.o
+OBJS = start.o main.o callargs.o
 EXE = IFFChunkTool
 
 all: $(OBJS)
@@ -11,10 +11,10 @@ all: $(OBJS)
 	@$(LD) $(LDFLAGS) -o $(EXE).db $^ $(LIBS)
 	@strip $(EXE).db -o $(EXE) --strip-unneeded
 	@Protect $(EXE) +E
-	List $(EXE)
+	@List $(EXE) LFORMAT "%N %L"
 
 dep:
-	$(CC) -MM $(OBJS)
+	$(CC) -MM $(OBJS:.o=.cpp)
 
 clean:
 	rm -vf *.o $(EXE) $(EXE).db
@@ -33,5 +33,6 @@ start.o: start.cpp
 
 # dependencies
 
-main.o: main.cpp
 start.o: start.cpp
+main.o: main.cpp main.h application.h iffreader.h iffwriter.h callargs.h
+callargs.o: callargs.cpp main.h callargs.h

@@ -1,3 +1,10 @@
+//==============
+// IFFChunkTool
+//==============
+
+#ifndef IFFCHUNKTOOL_MAIN_H
+#define IFFCHUNKTOOL_MAIN_H
+
 #include <exec/libraries.h>
 
 #include <proto/locale.h>
@@ -27,6 +34,7 @@ extern Library
 //=================
 
 int32 Problem(const char *msg);
+int32 SysProblem(const char *msg);
 
 //===============
 // locale stuff
@@ -35,9 +43,12 @@ int32 Problem(const char *msg);
 extern Library *LocaleBase;
 extern Catalog *Cat;
 
-static inline char* LS(int32 id, char* defstr)
+static inline const char* LS(int32 id, const char* defstr)
 {
 	return (Cat ? GetCatalogStr(Cat, id, defstr) : defstr);
 }
 
 #define MSG_NO_IFFPARSE_LIBRARY                 0
+#define MSG_COMMANDLINE_ARGS                    1
+
+#endif    /* IFFCHUNKTOOL_MAIN_H */

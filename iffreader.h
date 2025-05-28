@@ -1,0 +1,8 @@
+//==============
+// IFFChunkTool
+//==============
+
+class IFFReader
+{
+
+};
