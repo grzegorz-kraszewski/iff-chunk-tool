@@ -1,3 +1,7 @@
+//==============
+// IFFChunkTool
+//==============
+
 #include "iffreader.h"
 #include "iffwriter.h"
 #include "callargs.h"
@@ -11,7 +15,7 @@ class Application
 	public:
 
 	bool ready;
-	Application(CallArgs &args) : arguments(args), ready(FALSE) {}
+	Application(CallArgs &args);
 	bool Process() {}
 	~Application() {}
 };
