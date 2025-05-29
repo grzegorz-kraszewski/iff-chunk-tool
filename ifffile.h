@@ -27,11 +27,12 @@ class IFFFile
 
 	public:
 
+	static void Localize();
 	operator IFFHandle*() { return iff; }
 	IFFFile() : handle(NULL), path(NULL), iff(NULL), opened(FALSE) {}
 	bool OpenFile(const char *filepath, int32 mode);
 	const char* FileName() { return path; }
-	bool IFFProblem(int32 error) { return Problem("arghh"); }
+	bool IFFProblem(int32 error);
 	~IFFFile();
 };
 
