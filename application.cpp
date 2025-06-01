@@ -67,36 +67,48 @@ bool Application::Process()
 
 		if (chunkID = ValidateChunkID(arguments.getString(ARG_CHUNK)))
 		{
-			if (Stricmp(mode, "EXTRACT") == 0) return ExtractChunk(chunkID);
-
-			//----------------------------------------------------
-			// All the operations modes below require IFF writer.
+			//---------------------------------------------------
+			// All the operation modes below require copyBuffer.
 			//----------------------------------------------------
 
-			if (output && writer.OpenFile(output))
+			if (copyBuffer = AllocMem(COPY_BUFFER_SIZE, MEMF_ANY))
 			{
-				if (Stricmp(mode, "APPEND") == 0)
+				if (Stricmp(mode, "EXTRACT") == 0) return ExtractChunk(chunkID);
+
+				//----------------------------------------------------
+				// All the operation modes below require IFF writer.
+				//----------------------------------------------------
+
+				// TODO: if output is not given, chunks should be written to a temporary file
+				// then original should be deleted and temporary renamed to original
+
+				if (output && writer.OpenFile(output, reader.iffType))
 				{
-					//return AppendChunk();
+					if (Stricmp(mode, "APPEND") == 0)
+					{
+						return AppendChunk(chunkID);
+					}
+
+					if (Stricmp(mode, "INSERT") == 0)
+					{
+						//return InsertChunk();
+					}
+
+					if (Stricmp(mode, "REPLACE") == 0)
+					{
+						//return ReplaceChunk();
+					}
+
+					if (Stricmp(mode, "REMOVE") == 0)
+					{
+						return RemoveChunk(chunkID);
+					}
+
+					return Problem(LS(MSG_ARGS_UNKNOWN_MODE, "Commandline "
+						"arguments: unknown operation mode"));
 				}
 
-				if (Stricmp(mode, "INSERT") == 0)
-				{
-					//return InsertChunk();
-				}
-
-				if (Stricmp(mode, "REPLACE") == 0)
-				{
-					//return ReplaceChunk();
-				}
-
-				if (Stricmp(mode, "REMOVE") == 0)
-				{
-					//return RemoveChunk();
-				}
-
-				return Problem(LS(MSG_ARGS_UNKNOWN_MODE, "Commandline "
-					"arguments: unknown operation mode"));
+				FreeMem(copyBuffer, COPY_BUFFER_SIZE);
 			}
 		}
 	}
@@ -196,10 +208,9 @@ bool Application::ExtractChunk(uint32 id)
 {
 	ContextNode *cn;
 	int32 iffError;
-	bool result = TRUE, found = FALSE;
+	bool success = TRUE, found = FALSE;
 
-
-	for (;;)
+	while (success)
 	{
 		iffError = ParseIFF(reader, IFFPARSE_STEP);
 		cn = CurrentChunk(reader);
@@ -209,7 +220,7 @@ bool Application::ExtractChunk(uint32 id)
 			if (cn->cn_ID == id)
 			{
 				found = TRUE;
-				result = WriteChunkContents(cn);
+				success = WriteChunkContents(cn);
 				break;
 			}
 		}
@@ -219,25 +230,19 @@ bool Application::ExtractChunk(uint32 id)
 			{
 				if (!found)
 				{
-					char buf[6];
-
-					Printf("No '%s' chunk found in the source file.\n", IDtoStr(id, buf));
-					result = FALSE;
+					Printf(LS(MSG_CHUNK_NOT_FOUND_IN_SOURCE, "No '%s' chunk "
+						"found in the source file.\n"), IDtoStr(id, idBuf));
+					success = FALSE;
 				}
 
 				break;
 			}
 		}
-		else
-		{
-			result = reader.IFFProblem(iffError);
-			break;
-		}
+		else success = reader.IFFProblem(iffError);
 	}
 
-	return result;
+	return success;
 }
-
 
 //=============================================================================
 // Application::CopyChunk()
@@ -276,12 +281,150 @@ bool Application::CopyChunk(IFFReader &reader, IFFWriter &writer, ContextNode *c
 
 		iffError = PopChunk(writer);
 
+		//-------------------------------------------------------------------
 		// If read or write failed (success == FALSE), successful PopChunk()
 		// should not set 'success' to TRUE.
+		//-------------------------------------------------------------------
 
 		if (success && (iffError < 0)) success = writer.IFFProblem(iffError);
 	}
 	else success = writer.IFFProblem(iffError);
 
 	return success;
+}
+
+//=============================================================================
+// Application::RemoveChunk()
+//=============================================================================
+
+bool Application::RemoveChunk(uint32 id)
+{
+	ContextNode *cn;
+	int32 iffError;
+	bool success = TRUE, found = FALSE;
+
+	while (success)
+	{
+		iffError = ParseIFF(reader, IFFPARSE_STEP);
+		cn = CurrentChunk(reader);
+
+		if (iffError == 0)
+		{
+			if (cn->cn_ID != id) success = CopyChunk(reader, writer, cn);
+			else found = TRUE;
+		}
+		else if (iffError == IFFERR_EOC)
+		{
+			if (cn->cn_ID == ID_FORM)
+			{
+				if (!found)
+				{
+					Printf(LS(MSG_CHUNK_NOT_FOUND_IN_SOURCE,
+						"No '%s' chunk found in the source file.\n"),
+						IDtoStr(id, idBuf));
+				}
+
+				break;
+			}
+		}
+		else success = reader.IFFProblem(iffError);
+	}
+
+	return success;
+}
+
+//=============================================================================
+// Application::AppendChunk()
+//=============================================================================
+
+bool Application::AppendChunk(uint32 id)
+{
+	ContextNode *cn;
+	int32 iffError;
+	bool success = TRUE, found = FALSE;
+
+	while (success)
+	{
+		iffError = ParseIFF(reader, IFFPARSE_STEP);
+		cn = CurrentChunk(reader);
+
+		if (iffError == 0)
+		{
+			if (cn->cn_ID != id) success = CopyChunk(reader, writer, cn);
+			else found = TRUE;
+		}
+		else if (iffError == IFFERR_EOC)
+		{
+			if (cn->cn_ID == ID_FORM)
+			{
+				success = PushChunkFromSource(id);
+				break;
+			}
+		}
+		else success = reader.IFFProblem(iffError);
+	}
+
+	return success;
+}
+
+//=============================================================================
+// Application::PushChunkFromSource()
+//=============================================================================
+
+bool Application::PushChunkFromSource(uint32 id)
+{
+	const char *str;
+	const char *path;
+
+	str = arguments.getString(ARG_CONTENTS);
+	path = arguments.getString(ARG_DATAFILE);
+
+	if (str)
+	{
+		if (!path) return PushChunkFromString(str, id);
+		else return Problem(LS(MSG_BOTH_STRING_AND_FILE_SPECIFIED, "Specify "
+			"either string or file as chunk contents, not both"));
+	}
+	else
+	{
+		if (path) return PushChunkFromFile(path, id);
+		else return Problem(LS(MSG_NO_CHUNK_CONTENT_SPECIFIED, "Specify "
+			"string or file as chunk contents"));
+	}
+}
+
+//=============================================================================
+// Application::PushChunkFromString()
+//=============================================================================
+
+bool Application::PushChunkFromString(const char *string, uint32 id)
+{
+	int32 iffError;
+	int32 len;
+	bool success;
+
+	success = TRUE;
+	len = StrLen(string);
+
+	if ((iffError = PushChunk(writer, reader.iffType, id, len)) == 0)
+	{
+		if ((iffError = WriteChunkBytes(writer, string, len)) < 0)
+		{
+			success = writer.IFFProblem(iffError);
+		}
+
+		iffError = PopChunk(writer);
+		if (success && (iffError < 0)) success = writer.IFFProblem(iffError);
+	}
+	else success = writer.IFFProblem(iffError);
+
+	return success;
+}
+
+//=============================================================================
+// Application::PushChunkFromFile()
+//=============================================================================
+
+bool Application::PushChunkFromFile(const char *path, uint32 id)
+{
 }

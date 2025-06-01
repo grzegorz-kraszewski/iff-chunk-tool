@@ -3,7 +3,7 @@ LD = g++
 CFLAGS = -nostdlib -O2 -fbaserel -fomit-frame-pointer -mregparm -fno-exceptions -fno-rtti -D__NOLIBBASE__
 LDFLAGS = -nostdlib -fbaserel -fomit-frame-pointer -nostartfiles
 LIBS =
-OBJS = start.o main.o callargs.o application.o ifffile.o iffreader.o
+OBJS = start.o main.o callargs.o application.o ifffile.o iffreader.o iffwriter.o
 EXE = IFFChunkTool
 
 all: $(OBJS)
@@ -39,3 +39,4 @@ callargs.o: callargs.cpp main.h callargs.h
 application.o: application.cpp application.h iffreader.h ifffile.h main.h iffwriter.h callargs.h
 ifffile.o: ifffile.cpp main.h ifffile.h
 iffreader.o: iffreader.cpp iffreader.h ifffile.h main.h
+iffwriter.o: iffwriter.cpp iffwriter.h ifffile.h main.h

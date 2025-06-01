@@ -56,5 +56,8 @@ static inline const char* LS(int32 id, const char* defstr)
 #define MSG_ARGS_UNKNOWN_MODE                   4
 #define MSG_INVALID_CHUNK_ID                    5
 #define MSG_NO_OUTPUT_DATAFILE                  6
+#define MSG_CHUNK_NOT_FOUND_IN_SOURCE           7
+#define MSG_BOTH_STRING_AND_FILE_SPECIFIED      8
+#define MSG_NO_CHUNK_CONTENT_SPECIFIED          9
 
 #endif    /* IFFCHUNKTOOL_MAIN_H */

@@ -8,11 +8,11 @@
 
 class IFFWriter : public IFFFile
 {
+	bool formPushed;
+
 	public:
 
-	bool OpenFile(const char *filepath)
-	{
-		return IFFFile::OpenFile(filepath, MODE_NEWFILE);
-	}
-
+	IFFWriter() : formPushed(FALSE) {}
+	bool OpenFile(const char *filepath, uint32 formType);
+	~IFFWriter();
 };

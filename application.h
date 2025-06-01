@@ -16,15 +16,19 @@ class Application
 	IFFWriter writer;
 	uint32 chunk;
 	void *copyBuffer;
+	char idBuf[6];
 	bool ListChunks();
-	bool AppendChunk();
-	bool InsertChunk();
-	bool ReplaceChunk();
-	bool RemoveChunk();
+	bool AppendChunk(uint32 id);
+	bool InsertChunk(uint32 id);
+	bool ReplaceChunk(uint32 id);
+	bool RemoveChunk(uint32 id);
 	bool ExtractChunk(uint32 id);
+	bool PushChunkFromSource(uint32 id);
 	uint32 ValidateChunkID(const char *str);
 	bool WriteChunkContents(ContextNode *cn);
 	bool CopyChunk(IFFReader &src, IFFWriter &dest, ContextNode *cn);
+	bool PushChunkFromFile(const char *path, uint32 id);
+	bool PushChunkFromString(const char *string, uint32 id);
 
 	public:
 
