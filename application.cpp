@@ -357,6 +357,7 @@ bool Application::AppendChunk(uint32 id)
 		{
 			if (cn->cn_ID == ID_FORM)
 			{
+				#warning check if the chunk has been found before
 				success = PushChunkFromSource(id);
 				break;
 			}
