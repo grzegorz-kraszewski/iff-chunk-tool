@@ -10,6 +10,6 @@ class IFFReader : public IFFFile
 {
 	public:
 
+	IFFReader(const char *filepath);
 	uint32 iffType;
-	bool OpenFile(const char *filepath);
 };

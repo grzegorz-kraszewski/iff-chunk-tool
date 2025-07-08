@@ -21,16 +21,15 @@ class IFFFile
 
 	BPTR handle;
 	const char* path;
-	bool opened;
 	IFFHandle *iff;
 	bool FileProblem() { return SysProblem(path); }
+	bool opened;
 
 	public:
 
+	IFFFile(const char *filename, int32 mode);
 	static void Localize();
 	operator IFFHandle*() { return iff; }
-	IFFFile() : handle(NULL), path(NULL), iff(NULL), opened(FALSE) {}
-	bool OpenFile(const char *filepath, int32 mode);
 	const char* FileName() { return path; }
 	bool IFFProblem(int32 error);
 	~IFFFile();
