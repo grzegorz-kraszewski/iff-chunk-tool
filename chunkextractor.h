@@ -11,6 +11,9 @@
 class ChunkExtractor : public ChunkPicker
 {
 	const char *outname;
+	BPTR output;
+	void *copybuf;
+	bool CopyLoop(ContextNode *cn);
 
 	public:
 

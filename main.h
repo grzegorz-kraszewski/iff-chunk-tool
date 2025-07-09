@@ -47,6 +47,12 @@ extern Library
 	*IFFParseBase,
 	*UtilityBase;
 
+//================
+// some constants
+//================
+
+#define COPYBUF_SIZE 32768    // memory allocation when copying chunks or writing them to a file
+
 //==================
 // helper functions
 //==================
