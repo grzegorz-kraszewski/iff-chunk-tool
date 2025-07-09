@@ -12,7 +12,7 @@ bool ChunkPicker::Parse()
 		error = ParseIFF(iff, IFFPARSE_SCAN);
 
 		if (!error) result = ChunkWork(CurrentChunk(iff));
-		else if (error == IFFERR_EOC)
+		else if (error == IFFERR_EOF)
 		{
 			char idbuf[6];
 
