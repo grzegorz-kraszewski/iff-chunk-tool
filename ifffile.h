@@ -29,10 +29,9 @@ class IFFFile
 
 	IFFFile(const char *filename, int32 mode);
 	static void Localize();
-	operator IFFHandle*() { return iff; }
 	const char* FileName() { return path; }
 	bool IFFProblem(int32 error);
-	~IFFFile();
+	virtual ~IFFFile();
 };
 
 #endif    /* IFFCHUNKTOOL_IFFFILE_H */

@@ -11,9 +11,7 @@
 // IFFReader::IFFReader()
 //=============================================================================
 
-IFFReader::IFFReader(const char *filepath) :
-	IFFFile(filepath, MODE_OLDFILE),
-	iffType(0)
+IFFReader::IFFReader(const char *filepath) : IFFFile(filepath, MODE_OLDFILE), iffType(0)
 {
 	if (opened)
 	{

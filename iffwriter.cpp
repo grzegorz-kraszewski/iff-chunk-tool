@@ -8,9 +8,10 @@
 // IFFWriter::OpenFile()
 //=============================================================================
 
-bool IFFWriter::OpenFile(const char *filepath, uint32 formType)
+IFFWriter::IFFWriter(const char *filepath, uint32 formType) : IFFFile(filepath, MODE_NEWFILE), 
+formPushed(FALSE), ready(FALSE)
 {
-	if (IFFFile::OpenFile(filepath, MODE_NEWFILE))
+	if (opened)
 	{
 		int32 iffError;
 
@@ -19,11 +20,10 @@ bool IFFWriter::OpenFile(const char *filepath, uint32 formType)
 		if (iffError == 0)
 		{
 			formPushed = TRUE;
-			return TRUE;
+			ready = TRUE;
 		}
-		else return IFFProblem(iffError);
+		else IFFProblem(iffError);
 	}
-	else return FALSE;
 }
 
 //=============================================================================

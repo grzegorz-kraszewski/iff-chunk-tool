@@ -2,7 +2,9 @@
 // IFFChunkTool
 //==============
 
+#include "main.h"
 #include "application.h"
+#include "chunklister.h"
 
 #include <proto/dos.h>
 #include <proto/iffparse.h>
@@ -10,150 +12,50 @@
 #include <proto/exec.h>
 
 //=============================================================================
-// StrLen()
-//=============================================================================
-
-static int32 StrLen(const char *s)
-{
-	const char *v = s;
-
-	while (*v) v++;
-	return (int32)(v - s);
-}
-
-//=============================================================================
-// Application::ValidateChunkID()
-//-----------------------------------------------------------------------------
-// Converts a string to IFF chunk ID and validates it. Returns ID as uint32, or
-// 0 for failure. String must have 4 characters and must pass iffparse.library/
-// GoodID().
-//=============================================================================
-
-uint32 Application::ValidateChunkID(const char *str)
-{
-	if (str && (StrLen(str) == 4))
-	{
-		uint32 id = MAKE_ID(str[0], str[1], str[2], str[3]);
-		if (GoodID(id)) return id;
-	}
-
-	Printf(LS(MSG_INVALID_CHUNK_ID, "'%s' is not a valid IFF chunk identifier."
-		"\n"), str);
-
-	return 0;
-}
-
-//=============================================================================
 // Application::Process()
-//-----------------------------------------------------------------------------
-// Source file is needed in all operation modes, so it is opened first, before
-// mode checking.
 //=============================================================================
 
 bool Application::Process()
 {
 	const char *mode = arguments.getString(ARG_MODE);
-	const char *output = arguments.getString(ARG_TO);
-	uint32 chunkID;
+	bool result = FALSE;
+	IFFReader *processor = NULL;
 
-
-	if (reader.OpenFile(arguments.getString(ARG_FROM)))
+	if (Stricmp(mode, "APPEND") == 0)
 	{
-		if (Stricmp(mode, "LIST") == 0) return ListChunks();
 
-		//-------------------------------------------------
-		// All the operation modes below require chunk ID.
-		//-------------------------------------------------
-
-		if (chunkID = ValidateChunkID(arguments.getString(ARG_CHUNK)))
-		{
-			//---------------------------------------------------
-			// All the operation modes below require copyBuffer.
-			//----------------------------------------------------
-
-			if (copyBuffer = AllocMem(COPY_BUFFER_SIZE, MEMF_ANY))
-			{
-				if (Stricmp(mode, "EXTRACT") == 0) return ExtractChunk(chunkID);
-
-				//----------------------------------------------------
-				// All the operation modes below require IFF writer.
-				//----------------------------------------------------
-
-				// TODO: if output is not given, chunks should be written to a temporary file
-				// then original should be deleted and temporary renamed to original
-
-				if (output && writer.OpenFile(output, reader.iffType))
-				{
-					if (Stricmp(mode, "APPEND") == 0)
-					{
-						return AppendChunk(chunkID);
-					}
-
-					if (Stricmp(mode, "INSERT") == 0)
-					{
-						//return InsertChunk();
-					}
-
-					if (Stricmp(mode, "REPLACE") == 0)
-					{
-						//return ReplaceChunk();
-					}
-
-					if (Stricmp(mode, "REMOVE") == 0)
-					{
-						return RemoveChunk(chunkID);
-					}
-
-					return Problem(LS(MSG_ARGS_UNKNOWN_MODE, "Commandline "
-						"arguments: unknown operation mode"));
-				}
-
-				FreeMem(copyBuffer, COPY_BUFFER_SIZE);
-			}
-		}
 	}
-
-	return FALSE;
-}
-
-//=============================================================================
-// Application::ListChunks()
-//-----------------------------------------------------------------------------
-// Lists FORM chunk, then all its subchunks.
-//=============================================================================
-
-bool Application::ListChunks()
-{
-	ContextNode *cn;
-	char buf[6];
-	int32 iffError;
-	bool result = TRUE;
-
-	cn = CurrentChunk(reader);
-	Printf("FORM %s %ld\n", IDtoStr(cn->cn_Type, buf), cn->cn_Size);
-
-	for (;;)
+	else if (Stricmp(mode, "DUMP") == 0)
 	{
-		iffError = ParseIFF(reader, IFFPARSE_STEP);
-		cn = CurrentChunk(reader);
 
-		if (iffError == 0)
-		{
-			Printf("%s %ld\n", IDtoStr(cn->cn_ID, buf), cn->cn_Size);
-		}
-		else if (iffError == IFFERR_EOC)
-		{
-			if (cn->cn_ID == ID_FORM) break;
-		}
-		else
-		{
-			result = reader.IFFProblem(iffError);
-			break;
-		}
 	}
+	else if (Stricmp(mode, "EXTRACT") == 0)
+	{
 
+	}
+	else if (Stricmp(mode, "INSERT") == 0)
+	{
+
+	}
+	else if (Stricmp(mode, "LIST") == 0)
+	{
+		processor = new ChunkLister(arguments.getString(ARG_FROM));
+	}
+	else if (Stricmp(mode, "REMOVE") == 0)
+	{
+
+	}
+	else if (Stricmp(mode, "REPLACE") == 0)
+	{
+
+	}
+	else Printf("Unknown operation mode '%s'.\n", mode);
+
+	if (processor && (processor->iffType != 0)) result = processor->Parse();
 	return result;
 }
+
+#if 0
 
 //=============================================================================
 // Application::WriteChunkContents()
@@ -428,3 +330,5 @@ bool Application::PushChunkFromString(const char *string, uint32 id)
 bool Application::PushChunkFromFile(const char *path, uint32 id)
 {
 }
+
+#endif

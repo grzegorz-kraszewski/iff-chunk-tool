@@ -1,5 +1,6 @@
 #include <proto/exec.h>
 #include <proto/dos.h>
+#include <proto/iffparse.h>
 
 #include <dos/rdargs.h>
 #include <workbench/startup.h>
@@ -75,4 +76,38 @@ int32 Main(WBStartup *wbmsg)
 	}
 
 	return result;
+}
+
+//=============================================================================
+// StrLen()
+//=============================================================================
+
+int32 StrLen(const char *s)
+{
+	const char *v = s;
+
+	while (*v) v++;
+	return (int32)(v - s);
+}
+
+//=============================================================================
+// ValidateChunkID()
+//-----------------------------------------------------------------------------
+// Converts a string to IFF chunk ID and validates it. Returns ID as uint32, or
+// 0 for failure. String must have 4 characters and must pass iffparse.library/
+// GoodID().
+//=============================================================================
+
+uint32 ValidateChunkID(const char *str)
+{
+	if (str && (StrLen(str) == 4))
+	{
+		uint32 id = MAKE_ID(str[0], str[1], str[2], str[3]);
+		if (GoodID(id)) return id;
+	}
+
+	Printf(LS(MSG_INVALID_CHUNK_ID, "'%s' is not a valid IFF chunk identifier."
+		"\n"), str);
+
+	return 0;
 }

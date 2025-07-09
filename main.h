@@ -1,6 +1,23 @@
-//==============
-// IFFChunkTool
-//==============
+//=============================================================================================
+// Hierarchy of classes in the program.
+// 
+// CallArgs (handles commandline arguments)
+//
+// Application (processing mode checker and dispatcher)
+//
+// IFFFile
+//   IFFReader
+//     ChunkLister       (handles LIST)
+//     ChunkPicker       (base class for single chunk processor)
+//       ChunkExtractor  (handles EXTRACT)
+//       ChunkDumper     (handles DUMP)
+//     ChunkCopier       (base class for IFF->IFF operations)
+//       ChunkRemover    (handles REMOVE)
+//       ChunkReplacer   (handles REPLACE)
+//       ChunkInjector   (handles INSERT)
+//       ChunkAdder      (handles APPEND)
+//   IFFWriter  (ChunkCopier instances have it as member)
+//=============================================================================================
 
 #ifndef IFFCHUNKTOOL_MAIN_H
 #define IFFCHUNKTOOL_MAIN_H
@@ -29,6 +46,13 @@ extern Library
 	*DOSBase,
 	*IFFParseBase,
 	*UtilityBase;
+
+//==================
+// helper functions
+//==================
+
+int32 StrLen(const char *s);
+uint32 ValidateChunkID(const char *s);
 
 //=================
 // error reporting

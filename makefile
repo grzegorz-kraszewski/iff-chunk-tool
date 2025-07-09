@@ -1,12 +1,15 @@
-CC = g++
+CC = gcc
+CPP = g++
 LD = g++
 CFLAGS = -nostdlib -O2 -fbaserel -fomit-frame-pointer -mregparm -fno-exceptions -fno-rtti -D__NOLIBBASE__
 LDFLAGS = -nostdlib -fbaserel -fomit-frame-pointer -nostartfiles
 LIBS =
-OBJS = start.o main.o callargs.o application.o ifffile.o iffreader.o iffwriter.o
+OBJS = start.o main.o callargs.o application.o ifffile.o iffreader.o iffwriter.o chunklister.o purevirtual.o
 EXE = IFFChunkTool
 
-all: $(OBJS)
+.PHONY: pure dep clean
+
+all: $(OBJS) purevirtual.o
 	@echo "Linking $(EXE)..."
 	@$(LD) $(LDFLAGS) -o $(EXE).db $^ $(LIBS)
 	@strip $(EXE).db -o $(EXE) --strip-unneeded
@@ -14,18 +17,18 @@ all: $(OBJS)
 	@List $(EXE) LFORMAT "%N %L"
 
 dep:
-	$(CC) -MM $(OBJS:.o=.cpp)
+	$(CPP) -MM $(OBJS:.o=.cpp)
 
 clean:
 	rm -vf *.o $(EXE) $(EXE).db
 
 start.o: start.cpp
 	@echo "Compiling $@..."
-	@$(CC) $(CFLAGS) -fwritable-strings -c -o $@ $<
+	@$(CPP) $(CFLAGS) -fwritable-strings -c -o $@ $<
 
-# purevirtual.o: purevirtual.c
-# 	@echo "Compiling $@..."
-# 	@gcc $(CFLAGS) -c -o $@ $<
+purevirtual.o: purevirtual.c
+	@echo "Compiling $@..."
+	@$(CC) $(CFLAGS) -c -o $@ $<
 
 %.o: %.cpp
 	@echo "Compiling $@..."
@@ -34,9 +37,10 @@ start.o: start.cpp
 # dependencies
 
 start.o: start.cpp
-main.o: main.cpp main.h application.h iffreader.h ifffile.h iffwriter.h callargs.h
+main.o: main.cpp main.h application.h callargs.h
 callargs.o: callargs.cpp main.h callargs.h
-application.o: application.cpp application.h iffreader.h ifffile.h main.h iffwriter.h callargs.h
+application.o: application.cpp main.h application.h callargs.h chunklister.h iffreader.h ifffile.h
 ifffile.o: ifffile.cpp main.h ifffile.h
 iffreader.o: iffreader.cpp iffreader.h ifffile.h main.h
 iffwriter.o: iffwriter.cpp iffwriter.h ifffile.h main.h
+chunklister.o: chunklister.cpp chunklister.h iffreader.h ifffile.h main.h

@@ -12,7 +12,7 @@ class IFFWriter : public IFFFile
 
 	public:
 
-	IFFWriter() : formPushed(FALSE) {}
-	bool OpenFile(const char *filepath, uint32 formType);
-	~IFFWriter();
+	bool ready;
+	IFFWriter(const char *filepath, uint32 type);
+	virtual ~IFFWriter();
 };
