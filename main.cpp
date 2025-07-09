@@ -111,3 +111,27 @@ uint32 ValidateChunkID(const char *str)
 
 	return 0;
 }
+
+static void ProcPutChar(void)
+{
+	asm("move.b d0,(a3)+");
+}
+
+
+static void ProcCountChars(void)
+{
+	asm("addq.l #1,(a3)");
+}
+
+
+void VFmtPut(char *dest, const char *fmt, int32 *args)
+{
+	RawDoFmt(fmt, args, ProcPutChar, dest);
+}
+
+
+void FmtPut(char *dest, const char *fmt, int32 arg1, ...)
+{
+	int32 *_args = &arg1;
+	VFmtPut(dest, fmt, _args);
+}

@@ -6,6 +6,7 @@
 #include "application.h"
 #include "chunklister.h"
 #include "chunkextractor.h"
+#include "chunkdumper.h"
 
 #include <proto/dos.h>
 #include <proto/iffparse.h>
@@ -29,7 +30,13 @@ bool Application::Process()
 	}
 	else if (Stricmp(mode, "DUMP") == 0)
 	{
+		uint32 chunkid = ValidateChunkID(arguments.getString(ARG_CHUNK));
 
+		if (chunkid)
+		{
+			processor = new ChunkDumper(source, chunkid);
+		}
+		else result = Problem("CHUNK argument required in this operation mode");
 	}
 	else if (Stricmp(mode, "EXTRACT") == 0)
 	{

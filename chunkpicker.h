@@ -4,6 +4,9 @@
 // by ID and performs some action on the chunk data. Actions are defined in subclasses.
 //=============================================================================================
 
+#ifndef IFFCHUNKTOOL_CHUNKPICKER_H
+#define IFFCHUNKTOOL_CHUNKPICKER_H
+
 #include "main.h"
 #include "iffreader.h"
 
@@ -20,3 +23,5 @@ class ChunkPicker : public IFFReader
 	virtual bool Parse();
 	virtual bool ChunkWork(ContextNode *cn) = 0;
 };
+
+#endif    // IFFCHUNKTOOL_CHUNKPICKER_H
