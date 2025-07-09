@@ -6,6 +6,9 @@
 // implement the Parse() method.
 //=============================================================================================
 
+#ifndef IFFCHUNKTOOL_IFFREADER_H
+#define IFFCHUNKTOOL_IFFREADER_H
+
 #include "ifffile.h"
 
 #include <dos/dos.h>
@@ -18,3 +21,5 @@ class IFFReader : public IFFFile
 	virtual bool Parse() = 0;
 	uint32 iffType;
 };
+
+#endif     // IFFCHUNKTOOL_IFFREADER_H

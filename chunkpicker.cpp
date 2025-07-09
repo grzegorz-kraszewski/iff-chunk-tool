@@ -1,16 +1,25 @@
 #include "chunkpicker.h"
 
+#include <proto/dos.h>
 
-ChunkPicker::ChunkPicker(const char *filename, uint32 chid) : ready(FALSE), chunkId(chid), input(filename)
+bool ChunkPicker::Parse()
 {
-	if (input.ready)
-	{
-	}
-}
+	bool result = FALSE;
+	int32 error;
 
-bool ChunkPicker::Parse(const char *filename)
-{
-	if (input.OpenFile(filename))
+	if (!(error = StopChunk(iff, iffType, chunkId)))
 	{
+		error = ParseIFF(iff, IFFPARSE_SCAN);
+
+		if (!error) result = ChunkWork(CurrentChunk(iff));
+		else if (error == IFFERR_EOC)
+		{
+			char idbuf[6];
+
+			Printf("Chunk '%s' not found.\n", IDtoStr(chunkId, idbuf));
+		}
 	}
+	else result = IFFProblem(error);
+
+	return result;
 }

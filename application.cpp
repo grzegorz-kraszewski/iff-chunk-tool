@@ -5,6 +5,7 @@
 #include "main.h"
 #include "application.h"
 #include "chunklister.h"
+#include "chunkextractor.h"
 
 #include <proto/dos.h>
 #include <proto/iffparse.h>
@@ -18,6 +19,7 @@
 bool Application::Process()
 {
 	const char *mode = arguments.getString(ARG_MODE);
+	const char *source = arguments.getString(ARG_FROM);
 	bool result = FALSE;
 	IFFReader *processor = NULL;
 
@@ -31,7 +33,18 @@ bool Application::Process()
 	}
 	else if (Stricmp(mode, "EXTRACT") == 0)
 	{
+		const char *dataname = arguments.getString(ARG_DATAFILE);
+		uint32 chunkid = ValidateChunkID(arguments.getString(ARG_CHUNK));
 
+		if (dataname)
+		{
+			if (chunkid)
+			{
+				processor = new ChunkExtractor(source, chunkid, dataname);
+			}
+			else result = Problem("CHUNK argument required in this operation mode");
+		}
+		else result = Problem("DATA argument required in this operation mode");
 	}
 	else if (Stricmp(mode, "INSERT") == 0)
 	{
@@ -39,7 +52,7 @@ bool Application::Process()
 	}
 	else if (Stricmp(mode, "LIST") == 0)
 	{
-		processor = new ChunkLister(arguments.getString(ARG_FROM));
+		processor = new ChunkLister(source);
 	}
 	else if (Stricmp(mode, "REMOVE") == 0)
 	{
@@ -98,52 +111,6 @@ bool Application::WriteChunkContents(ContextNode *cn)
 		"use DATAFILE argument)"));
 
 	return result;
-}
-
-//=============================================================================
-// Application::ExtractChunk()
-//-----------------------------------------------------------------------------
-// Writes contents of specified chunk to a file. Requires DATAFILE argument.
-//=============================================================================
-
-bool Application::ExtractChunk(uint32 id)
-{
-	ContextNode *cn;
-	int32 iffError;
-	bool success = TRUE, found = FALSE;
-
-	while (success)
-	{
-		iffError = ParseIFF(reader, IFFPARSE_STEP);
-		cn = CurrentChunk(reader);
-
-		if (iffError == 0)
-		{
-			if (cn->cn_ID == id)
-			{
-				found = TRUE;
-				success = WriteChunkContents(cn);
-				break;
-			}
-		}
-		else if (iffError == IFFERR_EOC)
-		{
-			if (cn->cn_ID == ID_FORM)
-			{
-				if (!found)
-				{
-					Printf(LS(MSG_CHUNK_NOT_FOUND_IN_SOURCE, "No '%s' chunk "
-						"found in the source file.\n"), IDtoStr(id, idBuf));
-					success = FALSE;
-				}
-
-				break;
-			}
-		}
-		else success = reader.IFFProblem(iffError);
-	}
-
-	return success;
 }
 
 //=============================================================================

@@ -4,7 +4,8 @@ LD = g++
 CFLAGS = -nostdlib -O2 -fbaserel -fomit-frame-pointer -mregparm -fno-exceptions -fno-rtti -D__NOLIBBASE__
 LDFLAGS = -nostdlib -fbaserel -fomit-frame-pointer -nostartfiles
 LIBS =
-OBJS = start.o main.o callargs.o application.o ifffile.o iffreader.o iffwriter.o chunklister.o purevirtual.o
+OBJS = start.o main.o callargs.o application.o ifffile.o iffreader.o iffwriter.o chunklister.o \
+ chunkpicker.o chunkextractor.o
 EXE = IFFChunkTool
 
 .PHONY: pure dep clean
@@ -17,7 +18,7 @@ all: $(OBJS) purevirtual.o
 	@List $(EXE) LFORMAT "%N %L"
 
 dep:
-	$(CPP) -MM $(OBJS:.o=.cpp)
+	@$(CPP) -MM $(OBJS:.o=.cpp)
 
 clean:
 	rm -vf *.o $(EXE) $(EXE).db
@@ -39,8 +40,11 @@ purevirtual.o: purevirtual.c
 start.o: start.cpp
 main.o: main.cpp main.h application.h callargs.h
 callargs.o: callargs.cpp main.h callargs.h
-application.o: application.cpp main.h application.h callargs.h chunklister.h iffreader.h ifffile.h
+application.o: application.cpp main.h application.h callargs.h chunklister.h iffreader.h \
+ ifffile.h chunkextractor.h chunkpicker.h
 ifffile.o: ifffile.cpp main.h ifffile.h
 iffreader.o: iffreader.cpp iffreader.h ifffile.h main.h
 iffwriter.o: iffwriter.cpp iffwriter.h ifffile.h main.h
 chunklister.o: chunklister.cpp chunklister.h iffreader.h ifffile.h main.h
+chunkpicker.o: chunkpicker.cpp chunkpicker.h main.h iffreader.h ifffile.h
+chunkextractor.o: chunkextractor.cpp chunkextractor.h main.h chunkpicker.h iffreader.h ifffile.h
