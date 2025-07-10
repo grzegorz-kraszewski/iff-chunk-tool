@@ -8,6 +8,8 @@
 #include "chunkextractor.h"
 #include "chunkdumper.h"
 
+#include "chunkcopier.h"  // later include subclasses only
+
 #include <proto/dos.h>
 #include <proto/iffparse.h>
 #include <proto/utility.h>
@@ -21,12 +23,15 @@ bool Application::Process()
 {
 	const char *mode = arguments.getString(ARG_MODE);
 	const char *source = arguments.getString(ARG_FROM);
+	const char *destination = arguments.getString(ARG_TO);
 	bool result = FALSE;
 	IFFReader *processor = NULL;
 
+	// TODO: move arguments validation to constructors of ChunkXxxx classes.
+
 	if (Stricmp(mode, "APPEND") == 0)
 	{
-
+		processor = new ChunkCopier(source, destination);
 	}
 	else if (Stricmp(mode, "DUMP") == 0)
 	{
@@ -71,7 +76,12 @@ bool Application::Process()
 	}
 	else Printf("Unknown operation mode '%s'.\n", mode);
 
-	if (processor && (processor->iffType != 0)) result = processor->Parse();
+	if (processor)
+	{
+		if (processor->ready) result = processor->Parse();
+		delete processor;
+	}
+
 	return result;
 }
 
@@ -120,94 +130,12 @@ bool Application::WriteChunkContents(ContextNode *cn)
 	return result;
 }
 
-//=============================================================================
-// Application::CopyChunk()
-//-----------------------------------------------------------------------------
-// Reader object is assumed to be positioned at start of chunk described by the
-// ContextNode. Copy of this chunk is pushed to writer object. It is assumed
-// that copyBuffer is allocated.
-//=============================================================================
-
-bool Application::CopyChunk(IFFReader &reader, IFFWriter &writer, ContextNode *cn)
-{
-	int32 iffError, bytesToCopy;
-	bool success = TRUE;
-
-	iffError = PushChunk(writer, cn->cn_Type, cn->cn_ID, cn->cn_Size);
-
-	if (iffError == 0)
-	{
-		bytesToCopy = cn->cn_Size;
-
-		while (success && (bytesToCopy > 0))
-		{
-			int32 blocksize = bytesToCopy;
-
-			if (blocksize > COPY_BUFFER_SIZE) blocksize = COPY_BUFFER_SIZE;
-			iffError = ReadChunkBytes(reader, copyBuffer, blocksize);
-
-			if (iffError >= 0)
-			{
-				iffError = WriteChunkBytes(writer, copyBuffer, blocksize);
-				if (iffError >= 0) bytesToCopy -= blocksize;
-				else success = writer.IFFProblem(iffError);
-			}
-			else success = reader.IFFProblem(iffError);
-		}
-
-		iffError = PopChunk(writer);
-
-		//-------------------------------------------------------------------
-		// If read or write failed (success == FALSE), successful PopChunk()
-		// should not set 'success' to TRUE.
-		//-------------------------------------------------------------------
-
-		if (success && (iffError < 0)) success = writer.IFFProblem(iffError);
-	}
-	else success = writer.IFFProblem(iffError);
-
-	return success;
-}
 
 //=============================================================================
 // Application::RemoveChunk()
 //=============================================================================
 
-bool Application::RemoveChunk(uint32 id)
-{
-	ContextNode *cn;
-	int32 iffError;
-	bool success = TRUE, found = FALSE;
 
-	while (success)
-	{
-		iffError = ParseIFF(reader, IFFPARSE_STEP);
-		cn = CurrentChunk(reader);
-
-		if (iffError == 0)
-		{
-			if (cn->cn_ID != id) success = CopyChunk(reader, writer, cn);
-			else found = TRUE;
-		}
-		else if (iffError == IFFERR_EOC)
-		{
-			if (cn->cn_ID == ID_FORM)
-			{
-				if (!found)
-				{
-					Printf(LS(MSG_CHUNK_NOT_FOUND_IN_SOURCE,
-						"No '%s' chunk found in the source file.\n"),
-						IDtoStr(id, idBuf));
-				}
-
-				break;
-			}
-		}
-		else success = reader.IFFProblem(iffError);
-	}
-
-	return success;
-}
 
 //=============================================================================
 // Application::AppendChunk()

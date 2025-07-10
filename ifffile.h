@@ -29,6 +29,7 @@ class IFFFile
 
 	IFFFile(const char *filename, int32 mode);
 	static void Localize();
+	IFFHandle* GetIff() { return iff; }
 	const char* FileName() { return path; }
 	bool IFFProblem(int32 error);
 	virtual ~IFFFile();

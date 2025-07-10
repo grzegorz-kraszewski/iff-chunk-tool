@@ -18,7 +18,6 @@ class ChunkPicker : public IFFReader
 
 	public:
 
-	bool ready;
 	ChunkPicker(const char *filepath, uint32 chid) : IFFReader(filepath), chunkId(chid) {}
 	virtual bool Parse();
 	virtual bool ChunkWork(ContextNode *cn) = 0;

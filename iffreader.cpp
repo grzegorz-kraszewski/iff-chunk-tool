@@ -11,7 +11,7 @@
 // IFFReader::IFFReader()
 //=============================================================================
 
-IFFReader::IFFReader(const char *filepath) : IFFFile(filepath, MODE_OLDFILE), iffType(0)
+IFFReader::IFFReader(const char *filepath) : IFFFile(filepath, MODE_OLDFILE), iffType(0), ready(FALSE)
 {
 	if (opened)
 	{
@@ -23,7 +23,12 @@ IFFReader::IFFReader(const char *filepath) : IFFFile(filepath, MODE_OLDFILE), if
 		if (iffError == 0)
 		{
 			cn = CurrentChunk(iff);
-			if (cn->cn_ID == ID_FORM) iffType = cn->cn_Type;
+			
+			if (cn->cn_ID == ID_FORM)
+			{
+				iffType = cn->cn_Type;
+				ready = TRUE;
+			}
 			else Problem("IFF file is not FORM");
 		}
 		else IFFProblem(iffError);
