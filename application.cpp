@@ -27,7 +27,7 @@ bool Application::Process()
 	bool result = FALSE;
 	IFFReader *processor = NULL;
 
-	// TODO: move arguments validation to constructors of ChunkXxxx classes.
+	#warning move arguments validation to constructors of ChunkXxxx classes
 
 	if (Stricmp(mode, "APPEND") == 0)
 	{

@@ -55,6 +55,8 @@ bool ChunkCopier::CopyChunk(ContextNode *cn)
 
 	iffError = PushChunk(destination->GetIff(), cn->cn_Type, cn->cn_ID, cn->cn_Size);
 
+	#warning Copy loop is badly defined
+
 	if (iffError == 0)
 	{
 		bytesToCopy = cn->cn_Size;
@@ -121,7 +123,11 @@ bool ChunkCopier::Parse()
 		}
 		else if (iffError == IFFERR_EOC)
 		{
-			if (cn->cn_ID == ID_FORM) success = FormEndWork();
+			if (cn->cn_ID == ID_FORM)
+			{
+				success = FormEndWork();
+				break;
+			}
 			else success = PostChunkWork(cn);
 		}
 		else success = IFFProblem(iffError);
