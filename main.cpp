@@ -100,14 +100,17 @@ int32 StrLen(const char *s)
 
 uint32 ValidateChunkID(const char *str)
 {
-	if (str && (StrLen(str) == 4))
+	if (str)
 	{
-		uint32 id = MAKE_ID(str[0], str[1], str[2], str[3]);
-		if (GoodID(id)) return id;
+		if (StrLen(str) == 4)
+		{
+			uint32 id = MAKE_ID(str[0], str[1], str[2], str[3]);
+			if (GoodID(id)) return id;
+		}
+		else Printf(LS(MSG_INVALID_CHUNK_ID, "'%s' is not a valid IFF chunk "
+			"identifier.\n"), str);
 	}
-
-	Printf(LS(MSG_INVALID_CHUNK_ID, "'%s' is not a valid IFF chunk identifier."
-		"\n"), str);
+	else PutStr("'CHUNK' argument is required in this operation mode.\n");
 
 	return 0;
 }

@@ -27,36 +27,18 @@ bool Application::Process()
 	bool result = FALSE;
 	IFFReader *processor = NULL;
 
-	#warning move arguments validation to constructors of ChunkXxxx classes
-
 	if (Stricmp(mode, "APPEND") == 0)
 	{
 		processor = new ChunkCopier(source, destination);
 	}
 	else if (Stricmp(mode, "DUMP") == 0)
 	{
-		uint32 chunkid = ValidateChunkID(arguments.getString(ARG_CHUNK));
-
-		if (chunkid)
-		{
-			processor = new ChunkDumper(source, chunkid);
-		}
-		else result = Problem("CHUNK argument required in this operation mode");
+		processor = new ChunkDumper(source, arguments.getString(ARG_CHUNK));
 	}
 	else if (Stricmp(mode, "EXTRACT") == 0)
 	{
-		const char *dataname = arguments.getString(ARG_DATAFILE);
-		uint32 chunkid = ValidateChunkID(arguments.getString(ARG_CHUNK));
-
-		if (dataname)
-		{
-			if (chunkid)
-			{
-				processor = new ChunkExtractor(source, chunkid, dataname);
-			}
-			else result = Problem("CHUNK argument required in this operation mode");
-		}
-		else result = Problem("DATA argument required in this operation mode");
+		processor = new ChunkExtractor(source, arguments.getString(ARG_CHUNK),
+			arguments.getString(ARG_DATAFILE));
 	}
 	else if (Stricmp(mode, "INSERT") == 0)
 	{

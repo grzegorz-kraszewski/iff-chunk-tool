@@ -17,7 +17,6 @@ class ChunkExtractor : public ChunkPicker
 
 	public:
 
-	ChunkExtractor(const char *filepath, uint32 chid, const char *destname) :
-		ChunkPicker(filepath, chid), outname(destname) {}
+	ChunkExtractor(const char *filepath, const char *chunkid, const char *destname);
 	virtual bool ChunkWork(ContextNode *cn);
 };

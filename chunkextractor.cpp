@@ -4,11 +4,32 @@
 #include <proto/dos.h>
 #include <proto/iffparse.h>
 
-//=============================================================================================
-// ChunkWork() for ChunkExtractor copies current chunk contents to a file in a loop using
-// a fixed size buffer. Buffer size is defined in "main.h". This way even very large chunks
-// may be processes without requiring large memory area.
-//=============================================================================================
+//=============================================================================
+// ChunkExtractor::ChunkExtractor()
+//=============================================================================
+
+ChunkExtractor::ChunkExtractor(const char *filepath, const char *chunkid,
+ const char *destname) : ChunkPicker(filepath, chunkid)
+{
+	if (ready)
+	{
+		ready = FALSE;
+
+		if (destname)
+		{
+			outname = destname;
+			ready = TRUE;
+		}
+		else PutStr("'DATA' argument required in this operation mode.\n");
+	}
+}
+
+//=============================================================================
+// ChunkWork() for ChunkExtractor copies current chunk contents to a file in
+// a loop using a fixed size buffer. Buffer size is defined in "main.h". This
+// way even very large chunks may be processes without requiring large memory
+// area.
+//=============================================================================
 
 bool ChunkExtractor::ChunkWork(ContextNode *cn)
 {
@@ -30,9 +51,9 @@ bool ChunkExtractor::ChunkWork(ContextNode *cn)
 	return success;
 }
 
-//=============================================================================================
+//=============================================================================
 // Data copying loop.
-//=============================================================================================
+//=============================================================================
 
 bool ChunkExtractor::CopyLoop(ContextNode *cn)
 {

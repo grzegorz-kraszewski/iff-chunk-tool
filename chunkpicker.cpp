@@ -2,6 +2,25 @@
 
 #include <proto/dos.h>
 
+//=============================================================================
+// ChunkPicker::ChunkPicker()
+//=============================================================================
+
+ChunkPicker::ChunkPicker(const char *filepath, const char *chunkid) :
+	IFFReader(filepath)
+{
+	if (ready)
+	{
+		ready = FALSE;
+		chunkId = ValidateChunkID(chunkid);
+		if (chunkId) ready = TRUE;
+	}
+}
+
+//=============================================================================
+// ChunkPicker::Parse()
+//=============================================================================
+
 bool ChunkPicker::Parse()
 {
 	bool result = FALSE;

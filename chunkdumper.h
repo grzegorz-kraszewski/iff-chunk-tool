@@ -12,6 +12,7 @@ class ChunkDumper : public ChunkPicker
 {
 	public:
 
-	ChunkDumper(const char *filepath, uint32 chid) : ChunkPicker(filepath, chid) {}
+	ChunkDumper(const char *filepath, const char *chunkid) :
+		ChunkPicker(filepath, chunkid) {}
 	virtual bool ChunkWork(ContextNode *cn);
 };
