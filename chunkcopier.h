@@ -6,6 +6,9 @@
 // Destination is created dynamically in the constructor.
 //=============================================================================================
 
+#ifndef IFFCHUNKTOOL_CHUNKCOPIER_H
+#define IFFCHUNKTOOL_CHUNKCOPIER_H
+
 #include "main.h"
 #include "iffreader.h"
 #include "iffwriter.h"
@@ -33,3 +36,5 @@ class ChunkCopier : public IFFReader
 	virtual bool PostChunkWork(ContextNode *cn);
 	virtual bool FormEndWork();
 };
+
+#endif     // IFFCHUNKTOOL_CHUNKCOPIER_H

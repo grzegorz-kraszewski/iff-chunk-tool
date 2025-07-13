@@ -7,6 +7,7 @@
 #include "chunklister.h"
 #include "chunkextractor.h"
 #include "chunkdumper.h"
+#include "chunkremover.h"
 
 #include "chunkcopier.h"  // later include subclasses only
 
@@ -50,7 +51,8 @@ bool Application::Process()
 	}
 	else if (Stricmp(mode, "REMOVE") == 0)
 	{
-
+		processor = new ChunkRemover(source, arguments.getString(ARG_TO),
+			arguments.getString(ARG_CHUNK));
 	}
 	else if (Stricmp(mode, "REPLACE") == 0)
 	{
