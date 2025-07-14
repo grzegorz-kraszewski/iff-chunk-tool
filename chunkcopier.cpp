@@ -1,14 +1,61 @@
 #include "chunkcopier.h"
+#include "sysfile.h"
 
 #include <proto/exec.h>
 #include <proto/dos.h>
 
-//=============================================================================================
-// ChunkCopier::ChunkCopier()
-//=============================================================================================
+//=============================================================================
+// ChunkDataFile::CopyData()
+//=============================================================================
 
-ChunkCopier::ChunkCopier(const char *sourceName, const char *destName) : IFFReader(sourceName),
- destination(NULL), copyThisChunk(TRUE), copyBuffer(NULL)
+bool ChunkDataFile::CopyData(IFFWriter *dest)
+{
+	bool success = TRUE;
+	int32 bytesread, error;
+	void *copybuf;
+
+	if (copybuf = AllocMem(COPYBUF_SIZE, MEMF_ANY))
+	{
+		while (success)
+		{
+			bytesread = source.SfRead(copybuf, COPYBUF_SIZE);
+
+			if (bytesread > 0)
+			{
+				error = WriteChunkBytes(dest->GetIff(), copybuf, bytesread);
+				if (error < 0) success = dest->IFFProblem(error);
+			}
+			else if (bytesread == 0) break;
+			else success = source.SfProblem();
+		}
+
+		FreeMem(copybuf, COPYBUF_SIZE);
+	}
+	else success = Problem("out of memory");
+
+	return success;
+}
+
+//=============================================================================
+// ChunkDataString::CopyData()
+//=============================================================================
+
+bool ChunkDataString::CopyData(IFFWriter *dest)
+{
+	int32 error;
+
+	error = WriteChunkBytes(dest->GetIff(), string, StrLen(string));
+	if (error < 0) return dest->IFFProblem(error);
+	else return TRUE;
+}
+
+//=============================================================================
+// ChunkCopier::ChunkCopier()
+//=============================================================================
+
+ChunkCopier::ChunkCopier(const char *sourceName, const char *destName) :
+ IFFReader(sourceName), destination(NULL), copyThisChunk(TRUE),
+ copyBuffer(NULL), ready(FALSE)
 {
 	if (ready)
 	{
@@ -156,9 +203,9 @@ bool ChunkCopier::FormEndWork()
 	return TRUE;
 }
 
-//=============================================================================================
+//==============================================================================
 // ChunkCopier::PreChunkWork()
-//=============================================================================================
+//==============================================================================
 
 bool ChunkCopier::PreChunkWork(ContextNode *cn)
 {
@@ -168,9 +215,9 @@ bool ChunkCopier::PreChunkWork(ContextNode *cn)
 	return TRUE;
 }
 
-//=============================================================================================
+//=============================================================================
 // ChunkCopier::PostChunkWork()
-//=============================================================================================
+//=============================================================================
 
 bool ChunkCopier::PostChunkWork(ContextNode *cn)
 {
@@ -178,4 +225,31 @@ bool ChunkCopier::PostChunkWork(ContextNode *cn)
 
 	Printf("PostChunkWork('%s')\n", IDtoStr(cn->cn_ID, b));
 	return TRUE;
+}
+
+//=============================================================================
+// ChunkCopier::PushChunkFromDataSource()
+//=============================================================================
+
+bool ChunkCopier::PushChunkFromDataSource(uint32 chunkid, ChunkDataSource
+ *source)
+{
+	bool success = FALSE;
+	int32 error;
+
+	if (!(error = PushChunk(destination->GetIff(), iffType, chunkid,
+	 IFFSIZE_UNKNOWN)))
+	{
+		#warning ChunkCopier can provide its own copy buffer
+		success = source->CopyData(destination);
+		error = PopChunk(destination->GetIff());
+
+		if (success && (error < 0))
+		{
+			success = destination->IFFProblem(error);
+		}
+	}
+	else destination->IFFProblem(error);
+
+	return success;
 }

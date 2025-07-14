@@ -5,7 +5,7 @@ CFLAGS = -nostdlib -O2 -fbaserel -fomit-frame-pointer -mregparm -fno-exceptions 
 LDFLAGS = -nostdlib -fbaserel -fomit-frame-pointer -nostartfiles
 LIBS =
 OBJS = start.o main.o callargs.o application.o ifffile.o iffreader.o iffwriter.o chunklister.o \
- chunkpicker.o chunkextractor.o chunkdumper.o chunkcopier.o chunkremover.o
+ chunkpicker.o chunkextractor.o chunkdumper.o chunkcopier.o chunkremover.o chunkadder.o sysfile.o
 EXE = IFFChunkTool
 
 .PHONY: pure dep clean
@@ -38,10 +38,9 @@ purevirtual.o: purevirtual.c
 # dependencies
 
 start.o: start.cpp
-main.o: main.cpp main.h application.h callargs.h
+main.o: main.cpp main.h application.h callargs.h chunkcopier.h iffreader.h ifffile.h iffwriter.h sysfile.h
 callargs.o: callargs.cpp main.h callargs.h
-application.o: application.cpp main.h application.h callargs.h chunklister.h iffreader.h ifffile.h \
- chunkextractor.h chunkpicker.h chunkdumper.h chunkremover.h chunkcopier.h iffwriter.h
+application.o: application.cpp main.h application.h callargs.h chunkcopier.h iffreader.h ifffile.h iffwriter.h sysfile.h chunklister.h chunkextractor.h chunkpicker.h chunkdumper.h chunkremover.h chunkadder.h
 ifffile.o: ifffile.cpp main.h ifffile.h
 iffreader.o: iffreader.cpp iffreader.h ifffile.h main.h
 iffwriter.o: iffwriter.cpp iffwriter.h ifffile.h main.h
@@ -49,5 +48,8 @@ chunklister.o: chunklister.cpp chunklister.h iffreader.h ifffile.h main.h
 chunkpicker.o: chunkpicker.cpp chunkpicker.h main.h iffreader.h ifffile.h
 chunkextractor.o: chunkextractor.cpp chunkextractor.h main.h chunkpicker.h iffreader.h ifffile.h
 chunkdumper.o: chunkdumper.cpp chunkdumper.h main.h chunkpicker.h iffreader.h ifffile.h
-chunkcopier.o: chunkcopier.cpp chunkcopier.h main.h iffreader.h ifffile.h iffwriter.h
-chunkremover.o: chunkremover.cpp chunkremover.h chunkcopier.h main.h iffreader.h ifffile.h iffwriter.h
+chunkcopier.o: chunkcopier.cpp chunkcopier.h main.h iffreader.h ifffile.h iffwriter.h sysfile.h
+chunkremover.o: chunkremover.cpp chunkremover.h chunkcopier.h main.h iffreader.h ifffile.h iffwriter.h sysfile.h
+chunkadder.o: chunkadder.cpp chunkadder.h chunkcopier.h main.h iffreader.h ifffile.h iffwriter.h sysfile.h
+sysfile.o: sysfile.cpp sysfile.h main.h
+

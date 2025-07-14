@@ -3,6 +3,7 @@
 //==============
 
 #include "callargs.h"
+#include "chunkcopier.h"
 
 class Application
 {
@@ -12,5 +13,6 @@ class Application
 
 	Application(CallArgs &args) : arguments(args) {}
 	bool Process();
+	ChunkDataSource* PrepareDataSource();
 	~Application() {}
 };
