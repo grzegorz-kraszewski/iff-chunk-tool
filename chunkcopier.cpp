@@ -37,6 +37,20 @@ bool ChunkDataFile::CopyData(IFFWriter *dest)
 }
 
 //=============================================================================
+// ChunkDataString::ChunkDataString()
+// Unescaped string is always shorter or the same as original, so it can be
+// unescaped in-place safely.
+//=============================================================================
+
+ChunkDataString::ChunkDataString(char *string) : string((uint8*)string) 
+{
+	ready = FALSE;
+	strsize = 0;
+	if (Unescape()) ready = TRUE;
+	else PutStr("Broken escape sequence in CONTENT string.\n");
+}
+
+//=============================================================================
 // ChunkDataString::CopyData()
 //=============================================================================
 
@@ -44,9 +58,63 @@ bool ChunkDataString::CopyData(IFFWriter *dest)
 {
 	int32 error;
 
-	error = WriteChunkBytes(dest->GetIff(), string, StrLen(string));
+	error = WriteChunkBytes(dest->GetIff(), string, strsize);
 	if (error < 0) return dest->IFFProblem(error);
 	else return TRUE;
+}
+
+//=============================================================================
+// ChunkDataString::Unescape()
+//=============================================================================
+
+#define UNESCAPE_WAIT_FOR_BACKSLASH 1
+#define UNESCAPE_FIRST_HEXDIGIT     2
+#define UNESCAPE_SECOND_HEXDIGIT    3
+
+static uint8 hex2num(uint8 c)
+{
+	if ((c >= '0') && (c <= '9')) return c - '0';
+	else if ((c >= 'A') && (c <= 'F')) return c - 'A' + 10;
+	else if ((c >= 'a') && (c <= 'f')) return c - 'a' + 10;
+	else return 0xFF;
+}
+
+bool ChunkDataString::Unescape()
+{
+	bool success = TRUE;
+	uint8 c, b, v, *source = string, *dest = string;
+	int32 state = UNESCAPE_WAIT_FOR_BACKSLASH;
+
+	while (c = *source++)
+	{
+		switch (state)
+		{
+			case UNESCAPE_WAIT_FOR_BACKSLASH:
+				if (c == 0x5C) state = UNESCAPE_FIRST_HEXDIGIT;
+				else *dest++ = c;
+			break;
+
+			case UNESCAPE_FIRST_HEXDIGIT:
+				b = hex2num(c);
+				if (b == 0xFF) return FALSE;
+				v = b << 4;
+				state = UNESCAPE_SECOND_HEXDIGIT;
+			break;
+
+			case UNESCAPE_SECOND_HEXDIGIT:
+				b = hex2num(c);
+				if (b == 0xFF) return FALSE;
+				v += b;
+				*dest++ = v;
+				state = UNESCAPE_WAIT_FOR_BACKSLASH;
+			break;
+		}
+	}
+
+	*dest = 0x00;
+	strsize = dest - string;
+
+	return success;
 }
 
 //=============================================================================

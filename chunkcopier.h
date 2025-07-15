@@ -49,12 +49,13 @@ class ChunkDataFile : public ChunkDataSource
 
 class ChunkDataString : public ChunkDataSource
 {
-	const char *string;
+	uint8 *string;
+	int32 strsize;
+	bool Unescape();
 
 	public:
 
-	ChunkDataString(const char *string) : string(string)
-		{ DC("ChunkDataString"); ready = TRUE; }
+	ChunkDataString(char *string);
 	virtual bool CopyData(IFFWriter *dest);
 	virtual ~ChunkDataString() { DD("ChunkDataString"); }
 };

@@ -87,11 +87,11 @@ bool Application::Process()
 
 ChunkDataSource* Application::PrepareDataSource()
 {
-	const char *str;
+	char *str;
 	const char *path;
 	ChunkDataSource *data = NULL;
 
-	str = arguments.getString(ARG_CONTENTS);
+	str = (char*)arguments.getString(ARG_CONTENTS);
 	path = arguments.getString(ARG_DATAFILE);
 
 	if (str)
