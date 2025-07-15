@@ -9,6 +9,8 @@
 #include "chunkdumper.h"
 #include "chunkremover.h"
 #include "chunkadder.h"
+#include "chunkreplacer.h"
+#include "chunkinjector.h"
 
 #include <proto/dos.h>
 #include <proto/iffparse.h>
@@ -45,7 +47,9 @@ bool Application::Process()
 	}
 	else if (Stricmp(mode, "INSERT") == 0)
 	{
-
+		data = PrepareDataSource();
+		processor = new ChunkInjector(source, destination,
+		 arguments.getString(ARG_CHUNK), data, arguments.getString(ARG_AFTER));
 	}
 	else if (Stricmp(mode, "LIST") == 0)
 	{
@@ -58,7 +62,9 @@ bool Application::Process()
 	}
 	else if (Stricmp(mode, "REPLACE") == 0)
 	{
-
+		data = PrepareDataSource();
+		processor = new ChunkReplacer(source, destination,
+		 arguments.getString(ARG_CHUNK), data);
 	}
 	else Printf("Unknown operation mode '%s'.\n", mode);
 

@@ -185,50 +185,6 @@ bool ChunkCopier::Parse()
 	return success;
 }
 
-//=============================================================================================
-// ChunkCopier::FormStartWork()
-//=============================================================================================
-
-bool ChunkCopier::FormStartWork()
-{
-	Printf("FormStartWork()\n");
-	return TRUE;
-}
-
-//=============================================================================================
-// ChunkCopier::FormEndWork()
-//=============================================================================================
-
-bool ChunkCopier::FormEndWork()
-{
-	Printf("FormEndWork()\n");
-	return TRUE;
-}
-
-//==============================================================================
-// ChunkCopier::PreChunkWork()
-//==============================================================================
-
-bool ChunkCopier::PreChunkWork(ContextNode *cn)
-{
-	char b[6];
-
-	Printf("PreChunkWork('%s')\n", IDtoStr(cn->cn_ID, b));
-	return TRUE;
-}
-
-//=============================================================================
-// ChunkCopier::PostChunkWork()
-//=============================================================================
-
-bool ChunkCopier::PostChunkWork(ContextNode *cn)
-{
-	char b[6];
-
-	Printf("PostChunkWork('%s')\n", IDtoStr(cn->cn_ID, b));
-	return TRUE;
-}
-
 //=============================================================================
 // ChunkCopier::PushChunkFromDataSource()
 //=============================================================================

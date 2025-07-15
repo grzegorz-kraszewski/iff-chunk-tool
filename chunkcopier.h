@@ -80,10 +80,10 @@ class ChunkCopier : public IFFReader
 	ChunkCopier(const char *sourceName, const char *destName);
 	~ChunkCopier();
 	bool Parse();
-	virtual bool FormStartWork();
-	virtual bool PreChunkWork(ContextNode *cn);
-	virtual bool PostChunkWork(ContextNode *cn);
-	virtual bool FormEndWork();
+	virtual bool FormStartWork() {}
+	virtual bool PreChunkWork(ContextNode *cn) {}
+	virtual bool PostChunkWork(ContextNode *cn) {}
+	virtual bool FormEndWork() {}
 };
 
 #endif     // IFFCHUNKTOOL_CHUNKCOPIER_H
