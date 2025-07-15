@@ -8,14 +8,15 @@
 #include <proto/dos.h>            /* for tests only */
 
 //=============================================================================
-// IFFReader::OpenFile()
+// IFFReader::IFFReader()
 //=============================================================================
 
-bool IFFReader::OpenFile(const char *filepath)
+IFFReader::IFFReader(const char *filepath) : IFFFile(filepath, MODE_OLDFILE),
+ iffType(0), ready(FALSE)
 {
-	iffType = 0;
+	DC("IFFReader");
 
-	if (IFFFile::OpenFile(filepath, MODE_OLDFILE))
+	if (opened)
 	{
 		int32 iffError;
 		ContextNode *cn;
@@ -25,15 +26,23 @@ bool IFFReader::OpenFile(const char *filepath)
 		if (iffError == 0)
 		{
 			cn = CurrentChunk(iff);
-
+			
 			if (cn->cn_ID == ID_FORM)
 			{
 				iffType = cn->cn_Type;
-				return TRUE;
+				ready = TRUE;
 			}
-			else return Problem("IFF file is not FORM");
+			else Problem("IFF file is not FORM");
 		}
-		else return IFFProblem(iffError);
+		else IFFProblem(iffError);
 	}
-	else return FALSE;
+}
+
+//=============================================================================
+// IFFReader::~IFFReader()
+//=============================================================================
+
+IFFReader::~IFFReader()
+{
+	DD("IFFReader");
 }

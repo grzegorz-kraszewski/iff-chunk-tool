@@ -2,6 +2,9 @@
 // IFFChunkTool
 //==============
 
+#ifndef IFFCHUNKTOOL_IFFWRITER_H
+#define IFFCHUNKTOOL_IFFWRITER_H
+
 #include "ifffile.h"
 
 #include <dos/dos.h>
@@ -12,7 +15,9 @@ class IFFWriter : public IFFFile
 
 	public:
 
-	IFFWriter() : formPushed(FALSE) {}
-	bool OpenFile(const char *filepath, uint32 formType);
-	~IFFWriter();
+	bool ready;
+	IFFWriter(const char *filepath, uint32 type);
+	virtual ~IFFWriter();
 };
+
+#endif    // IFFCHUNKTOOL_IFFWRITER_H

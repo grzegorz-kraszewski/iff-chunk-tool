@@ -4,7 +4,7 @@ Commandline tool for manipulating chunks in IFF files. The tool is intended to b
 
 ## Features
 
-* Six modes of operation: list, insert, append, remove, replace, extract.
+* Seven modes of operation: list, insert, append, remove, replace, extract, dump.
 * Contents of inserted chunk may be specified as a string, or loaded from a file.
 * Chunk may be inserted as the first, the last or after chunk specified as argument.
 
@@ -16,11 +16,11 @@ Chunks listing
 
 Chunk insertion
 
-`IFFChunkTool <source> INSERT <chunk_ID> [AFTER <chunk_ID>] [<text_contents> | DATAFILE <contents>] [TO <destination>]`
+`IFFChunkTool <source> INSERT <chunk_ID> [AFTER <chunk_ID>] [<text_contents> | DATA <contents>] [TO <destination>]`
 
 Chunk appending
 
-`IFFChunkTool <source> APPEND <chunk_ID> [<text_contents> | DATAFILE <contents>] [TO <destination>]`
+`IFFChunkTool <source> APPEND <chunk_ID> [<text_contents> | DATA <contents>] [TO <destination>]`
 
 Chunk removal
 
@@ -28,8 +28,12 @@ Chunk removal
 
 Chunk replacement
 
-`IFFChunkTool <source> REPLACE <chunk_ID> [<text_contents> | DATAFILE <contents>] [TO <destination>]`
+`IFFChunkTool <source> REPLACE <chunk_ID> [<text_contents> | DATA <contents>] [TO <destination>]`
 
 Chunk contents extraction
 
-`IFFChunkTool <source> EXTRACT <chunk_ID> DATAFILE <contents>`
+`IFFChunkTool <source> EXTRACT <chunk_ID> DATA <destfile>`
+
+Hexdump of a chunk
+
+`IFFChunkTool <source> DUMP <chunk_ID>`

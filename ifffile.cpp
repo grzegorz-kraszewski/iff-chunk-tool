@@ -30,11 +30,16 @@ static const char* IFFErrorMessages[10] =
 };
 
 //=============================================================================
-// IFFFile::OpenFile
+// IFFFile::IFFFile
 //=============================================================================
 
-bool IFFFile::OpenFile(const char *filepath, int32 mode)
+IFFFile::IFFFile(const char *filepath, int32 mode) :
+	opened(FALSE),
+	handle(NULL),
+	path(NULL),
+	iff(NULL)
 {
+	DC("IFFFile");
 	path = filepath;
 
 	if (iff = AllocIFF())
@@ -45,19 +50,13 @@ bool IFFFile::OpenFile(const char *filepath, int32 mode)
 
 			iff->iff_Stream = handle;
 			InitIFFasDOS(iff);
-			iffError = OpenIFF(iff, (mode == MODE_OLDFILE) ? IFFF_READ :
-				IFFF_WRITE);
-
-			if (iffError == 0)
-			{
-				opened = TRUE;
-				return TRUE;
-			}
-			else return IFFProblem(iffError);
+			iffError = OpenIFF(iff, (mode == MODE_OLDFILE) ? IFFF_READ : IFFF_WRITE);
+			if (iffError == 0) opened = TRUE;
+			else IFFProblem(iffError);
 		}
-		else return FileProblem();
+		else FileProblem();
 	}
-	else return Problem(LS(MSG_OUT_OF_MEMORY, "Out of memory"));
+	else IFFProblem(IFFERR_NOMEM);
 }
 
 //=============================================================================
@@ -74,6 +73,7 @@ IFFFile::~IFFFile()
 	}
 
 	if (iff) FreeIFF(iff);
+	DD("IFFFile");
 }
 
 //=============================================================================

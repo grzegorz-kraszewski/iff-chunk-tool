@@ -1,6 +1,23 @@
-//==============
-// IFFChunkTool
-//==============
+//=============================================================================================
+// Hierarchy of classes in the program.
+// 
+// CallArgs (handles commandline arguments)
+//
+// Application (processing mode checker and dispatcher)
+//
+// IFFFile
+//   IFFReader
+//     ChunkLister       (handles LIST)
+//     ChunkPicker       (base class for single chunk processor)
+//       ChunkExtractor  (handles EXTRACT)
+//       ChunkDumper     (handles DUMP)
+//     ChunkCopier       (base class for IFF->IFF operations)
+//       ChunkRemover    (handles REMOVE)
+//       ChunkReplacer   (handles REPLACE)
+//       ChunkInjector   (handles INSERT)
+//       ChunkAdder      (handles APPEND)
+//   IFFWriter  (ChunkCopier instances have it as member)
+//=============================================================================================
 
 #ifndef IFFCHUNKTOOL_MAIN_H
 #define IFFCHUNKTOOL_MAIN_H
@@ -29,6 +46,32 @@ extern Library
 	*DOSBase,
 	*IFFParseBase,
 	*UtilityBase;
+
+//=======
+// debug
+//=======
+
+#ifdef DEBUG
+#define DC(a) Printf("%s $%08lx.\n", a, this)
+#define DD(a) Printf("~%s $%08lx.\n", a, this)
+#else
+#define DC(a)
+#define DD(a)
+#endif
+
+//================
+// some constants
+//================
+
+#define COPYBUF_SIZE 32768    // memory allocation when copying chunks or writing them to a file
+
+//==================
+// helper functions
+//==================
+
+int32 StrLen(const char *s);
+uint32 ValidateChunkID(const char *s);
+void FmtPut(char *dest, const char *fmt, int32 arg1, ...);
 
 //=================
 // error reporting
