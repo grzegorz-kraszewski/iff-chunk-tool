@@ -2,6 +2,7 @@ CC = gcc
 CPP = g++
 LD = g++
 CFLAGS = -nostdlib -O2 -fbaserel -fomit-frame-pointer -mregparm -fno-exceptions -fno-rtti -D__NOLIBBASE__
+CFLAGS += -DDEBUG
 LDFLAGS = -nostdlib -fbaserel -fomit-frame-pointer -nostartfiles
 LIBS =
 OBJS = start.o main.o callargs.o application.o ifffile.o iffreader.o iffwriter.o chunklister.o \

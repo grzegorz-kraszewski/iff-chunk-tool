@@ -16,4 +16,5 @@ class ChunkAdder : public ChunkCopier
 	ChunkAdder(const char *sourceName, const char *destName, const char *chunk,
 	 ChunkDataSource *data);
 	virtual bool FormEndWork();
+	virtual ~ChunkAdder() { DD("ChunkAdder"); }
 };

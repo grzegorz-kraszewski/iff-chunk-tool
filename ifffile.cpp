@@ -39,6 +39,7 @@ IFFFile::IFFFile(const char *filepath, int32 mode) :
 	path(NULL),
 	iff(NULL)
 {
+	DC("IFFFile");
 	path = filepath;
 
 	if (iff = AllocIFF())
@@ -72,6 +73,7 @@ IFFFile::~IFFFile()
 	}
 
 	if (iff) FreeIFF(iff);
+	DD("IFFFile");
 }
 
 //=============================================================================

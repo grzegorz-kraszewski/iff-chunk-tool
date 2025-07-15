@@ -11,8 +11,11 @@
 // IFFReader::IFFReader()
 //=============================================================================
 
-IFFReader::IFFReader(const char *filepath) : IFFFile(filepath, MODE_OLDFILE), iffType(0), ready(FALSE)
+IFFReader::IFFReader(const char *filepath) : IFFFile(filepath, MODE_OLDFILE),
+ iffType(0), ready(FALSE)
 {
+	DC("IFFReader");
+
 	if (opened)
 	{
 		int32 iffError;
@@ -33,4 +36,13 @@ IFFReader::IFFReader(const char *filepath) : IFFFile(filepath, MODE_OLDFILE), if
 		}
 		else IFFProblem(iffError);
 	}
+}
+
+//=============================================================================
+// IFFReader::~IFFReader()
+//=============================================================================
+
+IFFReader::~IFFReader()
+{
+	DD("IFFReader");
 }

@@ -28,9 +28,9 @@ class ChunkDataSource
 	public:
 
 	bool ready;
-	ChunkDataSource() : ready(FALSE) {}
+	ChunkDataSource() : ready(FALSE) { DC("ChunkDataSource"); }
 	virtual bool CopyData(IFFWriter *dest) = 0;
-	virtual ~ChunkDataSource() {}
+	virtual ~ChunkDataSource() { DD("ChunkDataSource"); }
 };
 
 
@@ -41,9 +41,9 @@ class ChunkDataFile : public ChunkDataSource
 	public:
 
 	ChunkDataFile(const char *filepath) : source(filepath, MODE_OLDFILE)
-		{ ready = source.ready; }
+		{ DC("ChunkDataFile"); ready = source.ready; }
 	virtual bool CopyData(IFFWriter *dest);
-	virtual ~ChunkDataFile() {}
+	virtual ~ChunkDataFile() { DD("ChunkDataFile"); }
 };
 
 
@@ -54,9 +54,9 @@ class ChunkDataString : public ChunkDataSource
 	public:
 
 	ChunkDataString(const char *string) : string(string)
-		{ ready = TRUE; }
+		{ DC("ChunkDataString"); ready = TRUE; }
 	virtual bool CopyData(IFFWriter *dest);
-	virtual ~ChunkDataString() {}
+	virtual ~ChunkDataString() { DD("ChunkDataString"); }
 };
 
 
@@ -77,7 +77,6 @@ class ChunkCopier : public IFFReader
 
 	public:
 
-	bool ready;
 	ChunkCopier(const char *sourceName, const char *destName);
 	~ChunkCopier();
 	bool Parse();

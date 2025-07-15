@@ -55,8 +55,10 @@ bool ChunkDataString::CopyData(IFFWriter *dest)
 
 ChunkCopier::ChunkCopier(const char *sourceName, const char *destName) :
  IFFReader(sourceName), destination(NULL), copyThisChunk(TRUE),
- copyBuffer(NULL), ready(FALSE)
+ copyBuffer(NULL)
 {
+	DC("ChunkCopier");
+
 	if (ready)
 	{
 		ready = FALSE;
@@ -68,7 +70,6 @@ ChunkCopier::ChunkCopier(const char *sourceName, const char *destName) :
 			if (destination && destination->ready)
 			{
 				copyBuffer = AllocMem(COPYBUF_SIZE, MEMF_ANY);
-
 				if (copyBuffer) ready = TRUE;
 				else Problem("Out of memory.");
 			}
@@ -85,6 +86,7 @@ ChunkCopier::~ChunkCopier()
 {
 	if (copyBuffer) FreeMem(copyBuffer, COPYBUF_SIZE);
 	if (destination) delete destination;
+	DD("ChunkCopier");
 }
 
 //=============================================================================

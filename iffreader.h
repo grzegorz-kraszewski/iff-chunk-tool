@@ -20,6 +20,7 @@ class IFFReader : public IFFFile
 	uint32 iffType;
 	IFFReader(const char *filepath);
 	virtual bool Parse() = 0;
+	virtual ~IFFReader();
 };
 
 #endif     // IFFCHUNKTOOL_IFFREADER_H

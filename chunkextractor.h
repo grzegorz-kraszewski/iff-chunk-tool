@@ -1,7 +1,7 @@
-//=============================================================================================
-// ChunkExtractor is a subclass of ChunkPicker. As its ChunkWork() it stores chunk contents to
-// a file.
-//=============================================================================================
+//=============================================================================
+// ChunkExtractor is a subclass of ChunkPicker. As its ChunkWork() it stores
+// chunk contents to a file.
+//=============================================================================
 
 #include "main.h"
 #include "chunkpicker.h"

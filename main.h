@@ -47,6 +47,18 @@ extern Library
 	*IFFParseBase,
 	*UtilityBase;
 
+//=======
+// debug
+//=======
+
+#ifdef DEBUG
+#define DC(a) Printf("%s $%08lx.\n", a, this)
+#define DD(a) Printf("~%s $%08lx.\n", a, this)
+#else
+#define DC(a)
+#define DD(a)
+#endif
+
 //================
 // some constants
 //================
