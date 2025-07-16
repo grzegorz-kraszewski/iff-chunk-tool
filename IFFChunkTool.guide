@@ -1,0 +1,162 @@
+@DATABASE IFFChunkTool.guide
+@$VER: IFFChunkTool.guide 0.2 (15.07.2025)
+@AUTHOR: Grzegorz Kraszewski
+@WORDWRAP
+@WIDTH 80
+@NODE Main "IFFChunkTool"
+@{B}IFFChunkTool 0.2@{UB}
+
+IFFChunkTool is a tool for manipulating chunks in IFF files. It is a CLI tool with no graphic user interface. It is intended for automated processing for example in shell scripts and makefiles. IFFChunkTool can:
+
+ @{" List chunks of an IFF file " LINK list}
+ @{" Hexdump chunk contents " LINK dump}
+ @{" Save chunk contents to a file " LINK extract}
+ @{" Remove given chunk from a file " LINK remove}
+ @{" Insert a new chunk as the first one, or after specified one " LINK insert}
+ @{" Append a new chunk as the last one " LINK append}
+ @{" Replace existing chunk contents " LINK replace}
+
+In modes where some new contents is added to an IFF file, it may be loaded from a file, or directly passed as a command argument.
+
+ @{" Summary of commandline arguments " LINK arguments}
+ @{" Escape sequences in text chunk contents " LINK escape}
+ @{" String termination in IFF files " LINK termination}
+
+IFFChunkTool operates only on flat IFF files (FORM type, no nested FORMs). LISTs and CATs are rejected.
+
+In examples in following chapters, "<>" parentheses denote values of required arguments, "[]" denote optional parts.
+@ENDNODE
+@NODE list "IFFChunkTool : LIST Mode"
+@{B}Chunk Listing@{UB}
+
+IFFChunkTool <file> LIST
+
+Lists FORM type and length, then identifiers and lengths of chunks ordered as in the file. If a chunk has odd length, pad byte is not taken into account.
+
+Example output for an IFF ILBM image:
+
+FORM ILBM 484
+AUTH 35
+BMHD 20
+CMAP 48
+GRAB 4
+CRNG 8
+CAMG 4
+BODY 304
+@ENDNODE
+@NODE dump "IFFChunkTool : DUMP Mode"
+@{B}Chunk Hexdump@{UB}
+
+IFFChunkTool <file> DUMP <chunk>
+
+Dumps the chunk contents as hexadecimal numbers and text. Each dump line contains 16 bytes of contents. An example:
+
+        0: 4a6f6520 41766572 61676520 3c6a2e61 Joe Average <j.a
+       16: 76657261 6765406e 6f776865 72652e63 verage@nowhere.c
+       32: 6f6d3e                              om>
+
+The first column is an offset from the chunk contents start, as decimal number. Then there are four columns of four bytes printed as hexadecimal numbers. The same 16 bytes are then shown as characters. Nonprintable characters of codes 0-31 and 128-159 are replaced with dots.
+@ENDNODE
+@NODE extract "IFFChunkTool : EXTRACT Mode"
+@{B}Save Chunk Contents to File@{UB}
+
+IFFChunkTool <file> EXTRACT <chunk> DATA <file>
+
+Writes specified chunk contents (without header) as binary data to specified destination file. Pad 0x00 byte is not written, if present.
+@ENDNODE
+@NODE remove "IFFChunkTool : REMOVE Mode"
+@{B}Chunk Removal@{UB}
+
+IFFChunkTool <file> REMOVE <chunk> [TO <file>]
+
+Creates a copy of the source file chunk by chunk, but with specified chunk skipped. If the specified chunk is not found, all the chunks from the source are copied to destination and message is printed.
+@ENDNODE
+@NODE insert "IFFChunkTool : INSERT Mode"
+@{B}Chunk Insert@{UB}
+
+By default INSERT inserts a new chunk as the first one in the file. It may be modified by AFTER argument, taking four letters chunk identifier as its value. If AFTER chunk is found, the new one is inserted after it. Nothing is inserted if AFTER chunk is not found.
+
+Insert chunk with text:
+
+IFFChunkTool <file> INSERT <chunk> "chunk contents" [AFTER <chunk>] [TO <file>]
+
+Insert from file:
+
+IFFChunkTool <file> INSERT <chunk> DATA <file> [AFTER <chunk>] [TO <file>]
+@ENDNODE
+@NODE append "IFFChunkTool : APPEND Mode"
+@{B}Chunk Append@{UB}
+
+Adds a new chunk as the last one in the file.
+
+Append a chunk with text:
+
+IFFChunkTool <file> APPEND <chunk> "chunk contents" [TO <file>]
+
+Append from file:
+
+IFFChunkTool <file> APPEND <chunk> DATA <file> [TO <file>]
+@ENDNODE
+@NODE replace "IFFChunkTool : REPLACE Mode"
+@{B}Chunk Contents Replacement@{UB}
+
+Replaces specified chunk contents with new data, either a string or loaded from file. If the chunk is not found, IFFChunkTool just copies other chunks.
+
+New contents needs not to be the same length as the old one. IFF structure of the output file will be adjusted accordingly.
+
+Replace with string:
+
+IFFChunkTool <file> REPLACE <chunk> "new contents" [TO <file>]
+
+Replace from file:
+
+IFFChunkTool <file> REPLACE <chunk> DATA <file> [TO <file>]
+@ENDNODE
+@NODE arguments "IFFChunkTool : Arguments Summary"
+@{B}Arguments Summary@{UB}
+
+AmigaDOS argument pattern of IFFChunkTool is "FROM/A,MODE/A,CHUNK,CONTENTS,DATA/K,AFTER/K,TO/K". As with most DOS commands, it is displayed, when IFFChunkTool is called with a single "?" argument.
+
+@{B}FROM@{UB} - path to the source IFF file. Required for all operation modes.
+
+@{B}MODE@{UB} - operation mode. One of: LIST, DUMP, EXTRACT, REMOVE, INSERT, APPEND, REPLACE. Required.
+
+@{B}CHUNK@{UB} - four letters chunk identifier. Required for all the modes except LIST.
+
+@{B}CONTENTS@{UB} - specifies new chunk contents as text in INSERT, APPEND and REPLACE modes. Alternative to DATA. The text can contain @{"escape sequences" LINK escape} for non-printable characters and binary data.
+
+@{B}DATA@{UB} - in INSERT, APPEND and REPLACE modes specifies a file with new contents for a chunk and is alternative to CONTENTS (one of them must be present). In EXTRACT mode specifies a file where chunk contents will be stored and is required for this mode.
+
+@{B}AFTER@{UB} - optional argument for INSERT mode only. Its value is a four letters chunk identifier. If specified, new chunk will be inserted after the specified chunk. If absent, new chunk will be inserted as the first.
+
+@{B}TO@{UB} - destination file for REMOVE, REPLACE, INSERT and APPEND modes. This argument is optional. If not specified, the source IFF file will be modified. It may be dangerous, as some operations, like chunk removal, cannot be reversed. Make sure you have a backup, or can recreate the source file, when not using TO argument.
+@ENDNODE
+@NODE escape "IFFChunkTool : Text Escape Sequences"
+@{B}Escape Sequences in Text@{UB}
+
+For INSERT, APPEND and REPLACE modes, new chunk contents may be specified as text. This text accepts also escape sequences for placing arbitrary bytes in the chunk. It is useful for non-printable characters, explicit string zero-termination, or entering short binary data without using a file.
+
+An escape sequence consists of '\\' character (backslash) followed by two hexadecimal digits. Digits are converted to a byte. They are case insensitive. Backslash itself is escaped with "\\5c" ($5c is decimal 92, which is backslash ASCII code).
+
+Examples:
+
+"Zero terminated string.\\00"
+
+"This string\\0Ais multiline."
+
+"\\07\\5B\\CD\\15" places a 32-bit number 123456789, as the chunk contents.
+
+@ENDNODE
+@NODE termination "IFFChunkTool : String Termination"
+@{B}String Termination in IFF Files@{UB}
+
+In many programming languages and across Amiga OS API strings are terminated with zero byte. IFF in general does not require zero termination. If a single string is stored in a chunk, its end is determined by the chunk length, so termination is redundant.
+
+On the other hand, if a string in an IFF file is zero-terminated, it may be used in a program immediately after loading the chunk to memory. That is why many IFF chunks containing text require it to be zero-terminated.
+
+IFFChunkTool does not implicitly add zero terminator, when chunk contents is specified as text in INSERT, APPEND and REPLACE modes. Explicit zero byte can be added with an @{"escape sequence" LINK escape}:
+
+"This string will be zero-terminated in a chunk.\\00"
+
+Terminating zero byte will be listed in DUMP mode and saved to a file in EXTRACT mode.
+@ENDNODE
