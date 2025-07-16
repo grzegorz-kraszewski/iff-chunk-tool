@@ -125,8 +125,6 @@ ChunkCopier::ChunkCopier(const char *sourceName, const char *destName) :
  IFFReader(sourceName), destination(NULL), copyThisChunk(TRUE),
  copyBuffer(NULL)
 {
-	DC("ChunkCopier");
-
 	if (ready)
 	{
 		ready = FALSE;
@@ -142,7 +140,7 @@ ChunkCopier::ChunkCopier(const char *sourceName, const char *destName) :
 				else Problem("Out of memory.");
 			}
 		}
-		else Problem("TO argument required in this operation mode");
+		else Problem("Out of memory.");
 	}
 }
 
@@ -154,7 +152,6 @@ ChunkCopier::~ChunkCopier()
 {
 	if (copyBuffer) FreeMem(copyBuffer, COPYBUF_SIZE);
 	if (destination) delete destination;
-	DD("ChunkCopier");
 }
 
 //=============================================================================

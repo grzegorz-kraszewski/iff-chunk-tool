@@ -18,6 +18,37 @@
 #include <proto/exec.h>
 
 //=============================================================================
+// Application::PrepareDestination()
+//=============================================================================
+
+const char* Application::PrepareDestination()
+{
+	const char *destination = arguments.getString(ARG_TO);
+
+	if (destination) return destination;
+
+	inPlace = TRUE;
+	builder.AddPathPart(arguments.getString(ARG_FROM));
+	builder.StripFileName();
+	builder.AddPathPart("iffchunktool.temp");
+	return builder.Path();
+}
+
+//=============================================================================
+// Application::TempFileToSource()
+//=============================================================================
+
+void Application::TempFileToSource()
+{
+	if (DeleteFile(arguments.getString(ARG_FROM)))
+	{
+		if (Rename(builder.Path(), arguments.getString(ARG_FROM))) {}
+		else SysProblem("Can't rename temporary file to source name");
+	}
+	else SysProblem("Can't delete source file");
+}
+
+//=============================================================================
 // Application::Process()
 //=============================================================================
 
@@ -32,6 +63,7 @@ bool Application::Process()
 
 	if (Stricmp(mode, "APPEND") == 0)
 	{
+		destination = PrepareDestination();
 		data = PrepareDataSource();
 		processor = new ChunkAdder(source, destination,
 		 arguments.getString(ARG_CHUNK), data);
@@ -47,6 +79,7 @@ bool Application::Process()
 	}
 	else if (Stricmp(mode, "INSERT") == 0)
 	{
+		destination = PrepareDestination();
 		data = PrepareDataSource();
 		processor = new ChunkInjector(source, destination,
 		 arguments.getString(ARG_CHUNK), data, arguments.getString(ARG_AFTER));
@@ -57,11 +90,13 @@ bool Application::Process()
 	}
 	else if (Stricmp(mode, "REMOVE") == 0)
 	{
-		processor = new ChunkRemover(source, arguments.getString(ARG_TO),
-			arguments.getString(ARG_CHUNK));
+		destination = PrepareDestination();
+		processor = new ChunkRemover(source, destination,
+		 arguments.getString(ARG_CHUNK));
 	}
 	else if (Stricmp(mode, "REPLACE") == 0)
 	{
+		destination = PrepareDestination();
 		data = PrepareDataSource();
 		processor = new ChunkReplacer(source, destination,
 		 arguments.getString(ARG_CHUNK), data);
@@ -74,6 +109,7 @@ bool Application::Process()
 		delete processor;
 	}
 
+	if (inPlace) TempFileToSource();
 	if (data) delete data;
 	return result;
 }
