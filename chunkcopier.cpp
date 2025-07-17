@@ -67,7 +67,7 @@ bool ChunkDataString::CopyData(IFFWriter *dest)
 // ChunkDataString::Unescape()
 //=============================================================================
 
-#define UNESCAPE_WAIT_FOR_BACKSLASH 1
+#define UNESCAPE_WAIT_FOR_ESC_CHAR  1
 #define UNESCAPE_FIRST_HEXDIGIT     2
 #define UNESCAPE_SECOND_HEXDIGIT    3
 
@@ -83,14 +83,14 @@ bool ChunkDataString::Unescape()
 {
 	bool success = TRUE;
 	uint8 c, b, v, *source = string, *dest = string;
-	int32 state = UNESCAPE_WAIT_FOR_BACKSLASH;
+	int32 state = UNESCAPE_WAIT_FOR_ESC_CHAR;
 
 	while (c = *source++)
 	{
 		switch (state)
 		{
-			case UNESCAPE_WAIT_FOR_BACKSLASH:
-				if (c == 0x5C) state = UNESCAPE_FIRST_HEXDIGIT;
+			case UNESCAPE_WAIT_FOR_ESC_CHAR:
+				if (c == '%') state = UNESCAPE_FIRST_HEXDIGIT;
 				else *dest++ = c;
 			break;
 
@@ -106,7 +106,7 @@ bool ChunkDataString::Unescape()
 				if (b == 0xFF) return FALSE;
 				v += b;
 				*dest++ = v;
-				state = UNESCAPE_WAIT_FOR_BACKSLASH;
+				state = UNESCAPE_WAIT_FOR_ESC_CHAR;
 			break;
 		}
 	}

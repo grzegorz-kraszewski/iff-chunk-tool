@@ -134,17 +134,17 @@ AmigaDOS argument pattern of IFFChunkTool is "FROM/A,MODE/A,CHUNK,CONTENTS,DATA/
 @NODE escape "IFFChunkTool : Text Escape Sequences"
 @{B}Escape Sequences in Text@{UB}
 
-For INSERT, APPEND and REPLACE modes, new chunk contents may be specified as text. This text accepts also escape sequences for placing arbitrary bytes in the chunk. It is useful for non-printable characters, explicit string zero-termination, or entering short binary data without using a file.
+For INSERT, APPEND and REPLACE modes, new chunk contents may be specified as text. This text accepts escape sequences for placing arbitrary bytes in the chunk. It is useful for non-printable characters, explicit string zero-termination, or entering short binary data without using a file.
 
-An escape sequence consists of '\\' character (backslash) followed by two hexadecimal digits. Digits are converted to a byte. They are case insensitive. Backslash itself is escaped with "\\5c" ($5c is decimal 92, which is backslash ASCII code).
+An escape sequence consists of '%' character (percent) followed by two hexadecimal digits. Digits are converted to a byte. They are case insensitive. Percent sign itself is escaped with "%25" ($25 is decimal 37, which is percent sign ASCII code).
 
 Examples:
 
-"Zero terminated string.\\00"
+"Zero terminated string.%00"
 
-"This string\\0Ais multiline."
+"This string%0Ais multiline."
 
-"\\07\\5B\\CD\\15" places a 32-bit number 123456789, as the chunk contents.
+"%07%5B%CD%15" places a 32-bit number 123456789, as the chunk contents.
 
 @ENDNODE
 @NODE termination "IFFChunkTool : String Termination"
