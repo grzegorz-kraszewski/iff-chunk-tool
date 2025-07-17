@@ -103,6 +103,8 @@ bool Application::Process()
 	}
 	else if (Stricmp(mode, "NEW") == 0)
 	{
+		result = CreateEmptyIFF(arguments.getString(ARG_FROM),
+		 arguments.getString(ARG_CHUNK));
 	}
 	else Printf("Unknown operation mode '%s'.\n", mode);
 
@@ -158,4 +160,22 @@ ChunkDataSource* Application::PrepareDataSource()
 
 	delete data;
 	return NULL;
+}
+
+//=============================================================================
+// Application::PrepareEmptyIFF()
+//=============================================================================
+
+bool Application::CreateEmptyIFF(const char *filePath, const char *typeString)
+{
+	uint32 type = ValidateTypeID(typeString);
+	bool result = FALSE;
+
+	if (type)
+	{
+		IFFWriter writer(filePath, type);
+		result = writer.ready;
+	}
+
+	return result;
 }

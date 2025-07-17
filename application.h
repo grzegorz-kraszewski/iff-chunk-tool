@@ -13,6 +13,7 @@ class Application
 	bool inPlace;
 	const char* PrepareDestination();
 	void TempFileToSource();
+	bool CreateEmptyIFF(const char *filePath, const char *typeString);
 
 	public:
 
