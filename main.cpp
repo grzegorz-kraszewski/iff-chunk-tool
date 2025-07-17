@@ -115,6 +115,32 @@ uint32 ValidateChunkID(const char *str)
 	return 0;
 }
 
+//=============================================================================
+// ValidateTypeID()
+//-----------------------------------------------------------------------------
+// Converts a string to IFF type ID and validates it. Returns ID as uint32, or
+// 0 for failure. String must have 4 characters and must pass iffparse.library/
+// GoodType().
+//=============================================================================
+
+uint32 ValidateTypeID(const char *str)
+{
+	if (str)
+	{
+		if (StrLen(str) == 4)
+		{
+			uint32 id = MAKE_ID(str[0], str[1], str[2], str[3]);
+			if (GoodType(id)) return id;
+		}
+		else Printf(LS(MSG_INVALID_CHUNK_ID, "'%s' is not a valid IFF type "
+			"identifier.\n"), str);
+	}
+	else PutStr("IFF type is required in this operation mode.\n");
+
+	return 0;
+}
+
+
 static void ProcPutChar(void)
 {
 	asm("move.b d0,(a3)+");
