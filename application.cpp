@@ -101,6 +101,9 @@ bool Application::Process()
 		processor = new ChunkReplacer(source, destination,
 		 arguments.getString(ARG_CHUNK), data);
 	}
+	else if (Stricmp(mode, "NEW") == 0)
+	{
+	}
 	else Printf("Unknown operation mode '%s'.\n", mode);
 
 	if (processor)
