@@ -52,14 +52,10 @@ char* PathBuilder::Path()
 void PathBuilder::AddPathPart(const char *part)
 {
 	if (currentSize == 0) ready = Extend();
-	
+
 	while (ready)
 	{
 		if (AddPart(path, part, currentSize)) return;
 		ready = Extend();
 	}
 }
-
-//=============================================================================
-// 
-//=============================================================================
