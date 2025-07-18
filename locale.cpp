@@ -20,17 +20,17 @@ const char* const BuiltInStrings[MSG_COUNT] = {
 	"IFF file is not FORM",
 	"IFF type is required for this operation mode.\n",
 	"\"%s\": unexpected end of file.\n",
-// MSG_IFFERR_UNEXPECTED_EOF              19
-// MSG_IFFERR_UNEXPECTED_EOC              20
-// MSG_IFFERR_NO_PROPERTY_SCOPE           21
-// MSG_IFFERR_OUT_OF_MEMORY               22
-// MSG_IFFERR_FILE_READ                   23
-// MSG_IFFERR_FILE_WRITE                  24
-// MSG_IFFERR_FILE_SEEK                   25
-// MSG_IFFERR_DATA_CORRUPTED              26
-// MSG_IFFERR_SYNTAX                      27
-// MSG_IFFERR_NOT_IFF_FILE                28
-// MSG_IFFERR_UNKNOWN                     29
+	"unexpected end of file",
+	"unexpected end of IFF chunk",
+	"IFF property without scope",
+	"out of memory",
+	"file read error",
+	"file write error",
+	"file seek error",
+	"file data corrupt",
+	"IFF syntax error",
+	"not an IFF file",
+	"\"%s\": unknown IFF error %ld.\n",
 	"'%s' is not a valid IFF type identifier.\n"
 };
 
