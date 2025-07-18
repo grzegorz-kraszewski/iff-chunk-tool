@@ -7,8 +7,8 @@
 
 ChunkReplacer::ChunkReplacer(const char *sourceName, const char *destName,
  const char *chunk, ChunkDataSource *data) : ChunkCopier(sourceName, destName),
- data(data), found(FALSE)
-{
+ data(data)
+ {
 	if (ready)
 	{
 		ready = FALSE;
@@ -29,24 +29,8 @@ bool ChunkReplacer::PreChunkWork(ContextNode *cn)
 	if (cn->cn_ID == chunkId)
 	{
 		copyThisChunk = FALSE;
-		found = TRUE;
+		chunkFound = TRUE;
 		return PushChunkFromDataSource(chunkId, data);
-	}
-	else return TRUE;
-}
-
-//=============================================================================
-// ChunkReplacer::FormEndWork()
-//=============================================================================
-
-bool ChunkReplacer::FormEndWork()
-{
-	char buf[6];
-
-	if (!found)
-	{
-		Printf(Ls[MSG_CHUNK_NOT_FOUND_IN_SOURCE], IDtoStr(chunkId, buf));
-		return FALSE;
 	}
 	else return TRUE;
 }

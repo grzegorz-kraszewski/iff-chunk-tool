@@ -8,10 +8,8 @@
 
 class ChunkRemover : public ChunkCopier
 {
-	uint32 chunkId;
-
 	public:
 
 	ChunkRemover(const char *sourceName, const char *destName, const char *chunk);
-	virtual bool PreChunkWork(ContextNode *cn) { if (cn->cn_ID == chunkId) copyThisChunk = FALSE; }
+	virtual bool PreChunkWork(ContextNode *cn);
 };

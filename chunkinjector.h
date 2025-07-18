@@ -9,9 +9,7 @@
 
 class ChunkInjector : public ChunkCopier
 {
-	uint32 chunkId;
 	uint32 chunkAfter;
-	bool found;
 	ChunkDataSource *data;
 
 	public:

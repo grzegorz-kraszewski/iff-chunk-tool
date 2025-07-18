@@ -116,8 +116,12 @@ bool ChunkDataString::Unescape()
 //=============================================================================
 
 ChunkCopier::ChunkCopier(const char *sourceName, const char *destName) :
- IFFReader(sourceName), destination(NULL), copyThisChunk(TRUE),
- copyBuffer(NULL)
+	IFFReader(sourceName),
+	destination(NULL),
+	copyThisChunk(TRUE),
+	chunkFound(FALSE),
+	chunkId(0),
+	copyBuffer(NULL)
 {
 	if (ready)
 	{
@@ -268,4 +272,20 @@ bool ChunkCopier::PushChunkFromDataSource(uint32 chunkid, ChunkDataSource
 	else destination->IFFProblem(error);
 
 	return success;
+}
+
+//=============================================================================
+// ChunkCopier::FormEndWork()
+//=============================================================================
+
+bool ChunkCopier::FormEndWork()
+{
+	char buf[6];
+
+	if (!chunkFound)
+	{
+		Printf(Ls[MSG_CHUNK_NOT_FOUND_IN_SOURCE], IDtoStr(chunkId, buf));
+	}
+
+	return TRUE;
 }

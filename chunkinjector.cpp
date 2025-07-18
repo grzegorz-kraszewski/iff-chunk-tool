@@ -8,9 +8,10 @@
 //=============================================================================
 
 ChunkInjector::ChunkInjector(const char *sourceName, const char *destName,
- const char *chunk, ChunkDataSource *data, const char *after) :
- ChunkCopier(sourceName, destName), chunkId(0), chunkAfter(0), found(FALSE),
- data(data)
+const char *chunk, ChunkDataSource *data, const char *after) :
+	ChunkCopier(sourceName, destName),
+	chunkAfter(0),
+	data(data)
 {
 	if (ready)
 	{
@@ -39,7 +40,7 @@ bool ChunkInjector::FormStartWork()
 {
 	if (chunkAfter == 0)
 	{
-		found = TRUE;
+		chunkFound = TRUE;
 		return PushChunkFromDataSource(chunkId, data);
 	}
 	else return TRUE;
@@ -53,7 +54,7 @@ bool ChunkInjector::PostChunkWork(ContextNode *cn)
 {
 	if (chunkAfter == cn->cn_ID)
 	{
-		found = TRUE;
+		chunkFound = TRUE;
 		return PushChunkFromDataSource(chunkId, data);
 	}
 	else return TRUE;
@@ -67,7 +68,7 @@ bool ChunkInjector::FormEndWork()
 {
 	char buf[6];
 
-	if (!found)
+	if (!chunkFound)
 	{
 		Printf(Ls[MSG_CHUNK_NOT_FOUND_IN_SOURCE], IDtoStr(chunkAfter, buf));
 		return FALSE;

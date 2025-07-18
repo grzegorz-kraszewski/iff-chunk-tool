@@ -9,15 +9,12 @@
 
 class ChunkReplacer : public ChunkCopier
 {
-	uint32 chunkId;
 	ChunkDataSource *data;
-	bool found;
 
 	public:
 
 	ChunkReplacer(const char *sourceName, const char *destName, const char
 	 *chunk, ChunkDataSource *data);
 	virtual bool PreChunkWork(ContextNode *cn);
-	virtual bool FormEndWork();
 	virtual ~ChunkReplacer() {}
 };
