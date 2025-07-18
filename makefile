@@ -7,12 +7,15 @@ LDFLAGS = -nostdlib -fbaserel -fomit-frame-pointer -nostartfiles
 LIBS =
 OBJS = start.o main.o callargs.o application.o ifffile.o iffreader.o iffwriter.o chunklister.o chunkpicker.o chunkextractor.o chunkdumper.o chunkcopier.o chunkremover.o chunkadder.o chunkreplacer.o chunkinjector.o sysfile.o pathbuilder.o locale.o
 EXE = IFFChunkTool
+TRANSLATIONS := $(wildcard translations/*.ct)
+LANGUAGES := $(basename $(notdir $(TRANSLATIONS)))
+CATALOGS := $(addprefix catalogs/,$(addsuffix /$(EXE).catalog,$(LANGUAGES)))
 
-.PHONY: pure dep clean
+.PHONY: pure dep clean locale
 
-all: $(OBJS) purevirtual.o
+all: $(OBJS) purevirtual.o locale
 	@echo "Linking $(EXE)..."
-	@$(LD) $(LDFLAGS) -o $(EXE).db $^ $(LIBS)
+	@$(LD) $(LDFLAGS) -o $(EXE).db $(OBJS) purevirtual.o $(LIBS)
 	@strip $(EXE).db -o $(EXE) --strip-unneeded
 	@Protect $(EXE) +E
 	@List $(EXE) LFORMAT "%N %L"
@@ -22,6 +25,13 @@ dep:
 
 clean:
 	rm -vf *.o $(EXE) $(EXE).db
+
+locale: $(CATALOGS)
+
+catalogs/%/$(EXE).catalog: translations/$(EXE).cd translations/%.ct
+	mkdir -p catalogs/$*
+	CatComp $^ CATALOG=$@
+	IFFChunkTool $@ INSERT AUTH AFTER FVER DATA=translations/$*.auth
 
 start.o: start.cpp
 	@echo "Compiling $@..."
