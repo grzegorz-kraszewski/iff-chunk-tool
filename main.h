@@ -106,5 +106,6 @@ static inline const char* LS(int32 id, const char* defstr)
 #define MSG_ERR_TEMP_FILE_RENAME               10
 #define MSG_DELETE_SOURCE_BEFORE_RENAME        11
 #define MSG_UNKNOWN_OPERATION_MODE             12
+#define MSG_BROKEN_ESCAPE_SEQUENCE             13
 
 #endif    /* IFFCHUNKTOOL_MAIN_H */

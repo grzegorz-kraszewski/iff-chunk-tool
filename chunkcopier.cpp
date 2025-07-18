@@ -31,7 +31,7 @@ bool ChunkDataFile::CopyData(IFFWriter *dest)
 
 		FreeMem(copybuf, COPYBUF_SIZE);
 	}
-	else success = Problem("out of memory");
+	else success = Problem(LS(MSG_OUT_OF_MEMORY, "Out of memory."));
 
 	return success;
 }
@@ -47,7 +47,8 @@ ChunkDataString::ChunkDataString(char *string) : string((uint8*)string)
 	ready = FALSE;
 	strsize = 0;
 	if (Unescape()) ready = TRUE;
-	else PutStr("Broken escape sequence in CONTENT string.\n");
+	else PutStr(LS(MSG_BROKEN_ESCAPE_SEQUENCE, "Broken escape sequence in "
+	"CONTENT string.\n"));
 }
 
 //=============================================================================
@@ -137,10 +138,10 @@ ChunkCopier::ChunkCopier(const char *sourceName, const char *destName) :
 			{
 				copyBuffer = AllocMem(COPYBUF_SIZE, MEMF_ANY);
 				if (copyBuffer) ready = TRUE;
-				else Problem("Out of memory.");
+				else Problem(LS(MSG_OUT_OF_MEMORY, "Out of memory."));
 			}
 		}
-		else Problem("Out of memory.");
+		else Problem(LS(MSG_OUT_OF_MEMORY, "Out of memory."));
 	}
 }
 
