@@ -8,8 +8,6 @@ ChunkAdder::ChunkAdder(const char *sourceName, const char *destName,
  const char *chunk, ChunkDataSource *data) : ChunkCopier(sourceName, destName),
  data(data)
 {
-	DC("ChunkAdder");
-
 	if (ready)
 	{
 		ready = FALSE;
