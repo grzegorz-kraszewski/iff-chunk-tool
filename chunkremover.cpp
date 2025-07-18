@@ -9,11 +9,6 @@ ChunkRemover::ChunkRemover(const char *sourceName, const char *destName,
 	{
 		ready = FALSE;
 
-		if (chunk)
-		{
-			if (chunkId = ValidateChunkID(chunk)) ready = TRUE;
-		}
-		else PutStr(LS(MSG_CHUNK_ARGUMENT_REQUIRED, "'CHUNK' argument "
-		"required for this operation mode.\n"));
+		if (chunkId = ValidateChunkID(chunk)) ready = TRUE;
 	}
 }

@@ -13,8 +13,6 @@
 IFFWriter::IFFWriter(const char *filepath, uint32 formType) : IFFFile(filepath, MODE_NEWFILE), 
 formPushed(FALSE), ready(FALSE)
 {
-	DC("IFFWriter");
-
 	if (opened)
 	{
 		int32 iffError;
@@ -43,6 +41,4 @@ IFFWriter::~IFFWriter()
 		iffError = PopChunk(iff);
 		if (iffError < 0) IFFProblem(iffError);
 	}
-
-	DD("IFFWriter");
 }

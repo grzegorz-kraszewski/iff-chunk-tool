@@ -15,25 +15,18 @@ ChunkInjector::ChunkInjector(const char *sourceName, const char *destName,
 	{
 		ready = FALSE;
 
-		if (chunk)
+		if (chunkId = ValidateChunkID(chunk))
 		{
-			chunkId = ValidateChunkID(chunk);
-
-			if (chunkId)
+			if (data && data->ready)
 			{
-				if (data && data->ready)
+				if (after)
 				{
-					if (after)
-					{
-						chunkAfter = ValidateChunkID(after);
-						if (chunkAfter) ready = TRUE;
-					}
-					else ready = TRUE;
+					chunkAfter = ValidateChunkID(after);
+					if (chunkAfter) ready = TRUE;
 				}
+				else ready = TRUE;
 			}
 		}
-		else PutStr(LS(MSG_CHUNK_ARGUMENT_REQUIRED, "CHUNK argument is "
-		"required for this operation mode.\n"));
 	}
 }
 

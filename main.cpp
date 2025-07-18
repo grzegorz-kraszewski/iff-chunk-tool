@@ -110,7 +110,8 @@ uint32 ValidateChunkID(const char *str)
 		else Printf(LS(MSG_INVALID_CHUNK_ID, "'%s' is not a valid IFF chunk "
 			"identifier.\n"), str);
 	}
-	else PutStr("'CHUNK' argument is required in this operation mode.\n");
+	else PutStr(LS(MSG_CHUNK_ARGUMENT_REQUIRED, "'CHUNK' argument is required "
+	"for this operation mode.\n"));
 
 	return 0;
 }

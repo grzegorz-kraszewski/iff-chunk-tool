@@ -109,5 +109,6 @@ static inline const char* LS(int32 id, const char* defstr)
 #define MSG_BROKEN_ESCAPE_SEQUENCE             13
 #define MSG_DATA_ARGUMENT_REQUIRED             14
 #define MSG_CHUNK_ARGUMENT_REQUIRED            15
+#define MSG_IFF_FILE_IS_NOT_FORM               16
 
 #endif    /* IFFCHUNKTOOL_MAIN_H */
