@@ -2,9 +2,11 @@
 
 Commandline tool for manipulating chunks in IFF files. The tool is intended to be used for automated processing of IFF files in scripts, makefiles etc.
 
+Program for AmigaOS 3.0+.
+
 ## Features
 
-* Seven modes of operation: list, insert, append, remove, replace, extract, dump.
+* Eight modes of operation: list, insert, append, remove, replace, extract, dump, new.
 * Contents of inserted chunk may be specified as a string, or loaded from a file.
 * Chunk may be inserted as the first, the last or after chunk specified as argument.
 
@@ -37,3 +39,7 @@ Chunk contents extraction
 Hexdump of a chunk
 
 `IFFChunkTool <source> DUMP <chunk_ID>`
+
+Create an empty IFF file of given type
+
+`IFFChunkTool <filename> NEW <typeid>`
