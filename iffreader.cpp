@@ -33,7 +33,7 @@ IFFReader::IFFReader(const char *filepath) : IFFFile(filepath, MODE_OLDFILE),
 				iffType = cn->cn_Type;
 				ready = TRUE;
 			}
-			else Problem(LS(MSG_IFF_FILE_IS_NOT_FORM, "IFF file is not FORM"));
+			else Problem(Ls[MSG_IFF_FILE_IS_NOT_FORM]);
 		}
 		else IFFProblem(iffError);
 	}

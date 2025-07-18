@@ -19,7 +19,7 @@ CallArgs::CallArgs()
 
 	if (args = ReadArgs("FROM/A,MODE/A,CHUNK,CONTENTS,DATA/K,AFTER/K,TO/K",
 		vals, NULL)) ready = TRUE;
-	else SysProblem(LS(MSG_COMMANDLINE_ARGS, "Program arguments error"));
+	else SysProblem(Ls[MSG_COMMANDLINE_ARGS]);
 }
 
 //=============================================================================

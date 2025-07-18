@@ -45,8 +45,7 @@ bool ChunkReplacer::FormEndWork()
 
 	if (!found)
 	{
-		Printf(LS(MSG_CHUNK_NOT_FOUND_IN_SOURCE, "Chunk '%s' not found.\n"),
-		 IDtoStr(chunkId, buf));
+		Printf(Ls[MSG_CHUNK_NOT_FOUND_IN_SOURCE], IDtoStr(chunkId, buf));
 		return FALSE;
 	}
 	else return TRUE;

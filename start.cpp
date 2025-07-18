@@ -13,7 +13,7 @@ APTR TaskPool = NULL;
 
 extern ULONG Main(WBStartup *wbmsg);
 
-// #define HAVE_GLOBAL_CONSTRUCTORS
+#define HAVE_GLOBAL_CONSTRUCTORS
 
 #ifdef HAVE_GLOBAL_CONSTRUCTORS
 extern void (*__CTOR_LIST__[])(void);

@@ -44,11 +44,9 @@ void Application::TempFileToSource()
 	if (DeleteFile(arguments.getString(ARG_FROM)))
 	{
 		if (Rename(builder.Path(), arguments.getString(ARG_FROM))) {}
-		else SysProblem(LS(MSG_ERR_TEMP_FILE_RENAME, "Can't rename temporary "
-		"file to source name"));
+		else SysProblem(Ls[MSG_ERR_TEMP_FILE_RENAME]);
 	}
-	else SysProblem(LS(MSG_DELETE_SOURCE_BEFORE_RENAME, "Can't delete source "
-	"file"));
+	else SysProblem(Ls[MSG_DELETE_SOURCE_BEFORE_RENAME]);
 }
 
 //=============================================================================
@@ -109,8 +107,7 @@ bool Application::Process()
 		result = CreateEmptyIFF(arguments.getString(ARG_FROM),
 		 arguments.getString(ARG_CHUNK));
 	}
-	else Printf(LS(MSG_UNKNOWN_OPERATION_MODE, "Unknown operation mode "
-	"'%s'.\n"), mode);
+	else Printf(Ls[MSG_UNKNOWN_OPERATION_MODE], mode);
 
 	if (processor)
 	{
@@ -144,8 +141,7 @@ ChunkDataSource* Application::PrepareDataSource()
 		if (!path) data = new ChunkDataString(str);
 		else
 		{
-			Problem(LS(MSG_BOTH_STRING_AND_FILE_SPECIFIED, "Specify either "
-			 "string or file as chunk contents, not both"));
+			Problem(Ls[MSG_BOTH_STRING_AND_FILE_SPECIFIED]);
 			return NULL;
 		}
 	}
@@ -154,8 +150,7 @@ ChunkDataSource* Application::PrepareDataSource()
 		if (path) data = new ChunkDataFile(path);
 		else
 		{
-			Problem(LS(MSG_NO_CHUNK_CONTENT_SPECIFIED, "Specify string or "
-			 "file as chunk contents"));
+			Problem(Ls[MSG_NO_CHUNK_CONTENT_SPECIFIED]);
 			return NULL;
 		}
 	}

@@ -10,8 +10,8 @@
 #include "application.h"
 
 
-Library *IFFParseBase, *LocaleBase, *UtilityBase;
-Catalog *Cat;
+Library *IFFParseBase, *UtilityBase;
+AppLocale Ls("IffChunkTool.catalog");
 
 //=============================================================================
 // Problem
@@ -45,11 +45,6 @@ int32 Main(WBStartup *wbmsg)
 {
 	int32 result = RETURN_FAIL;
 
-	if (LocaleBase = OpenLibrary("locale.library", 39))
-	{
-		Cat = OpenCatalogA(NULL, "iffchunktool.catalog", NULL);
-	}
-
 	if (UtilityBase = OpenLibrary("utility.library", 39))
 	{
 		if (IFFParseBase = OpenLibrary("iffparse.library", 39))
@@ -66,15 +61,9 @@ int32 Main(WBStartup *wbmsg)
 			result = RETURN_OK;
 			CloseLibrary(IFFParseBase);
 		}
-		else Problem(LS(MSG_NO_IFFPARSE_LIBRARY, "Can't open iffparse.library v39+"));
+		else Problem(Ls[MSG_NO_IFFPARSE_LIBRARY]);
 	}
-	else Problem(LS(MSG_NO_UTILITY_LIBRARY, "Can't open utility.library v39+"));
-
-	if (LocaleBase)
-	{
-		CloseCatalog(Cat);
-		CloseLibrary(LocaleBase);
-	}
+	else Problem(Ls[MSG_NO_UTILITY_LIBRARY]);
 
 	return result;
 }
@@ -108,11 +97,9 @@ uint32 ValidateChunkID(const char *str)
 			uint32 id = MAKE_ID(str[0], str[1], str[2], str[3]);
 			if (GoodID(id)) return id;
 		}
-		else Printf(LS(MSG_INVALID_CHUNK_ID, "'%s' is not a valid IFF chunk "
-		"identifier.\n"), str);
+		else Printf(Ls[MSG_INVALID_CHUNK_ID], str);
 	}
-	else PutStr(LS(MSG_CHUNK_ARGUMENT_REQUIRED, "'CHUNK' argument is required "
-	"for this operation mode.\n"));
+	else PutStr(Ls[MSG_CHUNK_ARGUMENT_REQUIRED]);
 
 	return 0;
 }
@@ -134,11 +121,9 @@ uint32 ValidateTypeID(const char *str)
 			uint32 id = MAKE_ID(str[0], str[1], str[2], str[3]);
 			if (GoodType(id)) return id;
 		}
-		else Printf(LS(MSG_INVALID_CHUNK_ID, "'%s' is not a valid IFF type "
-		"identifier.\n"), str);
+		else Printf(Ls[MSG_INVALID_TYPE_ID], str);
 	}
-	else PutStr(LS(MSG_IFF_TYPE_ARGUMENT_REQUIRED, "IFF type is required for "
-	"this operation mode.\n"));
+	else PutStr(Ls[MSG_IFF_TYPE_ARGUMENT_REQUIRED]);
 
 	return 0;
 }

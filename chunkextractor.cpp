@@ -21,8 +21,7 @@ ChunkExtractor::ChunkExtractor(const char *filepath, const char *chunkid,
 			outname = destname;
 			ready = TRUE;
 		}
-		else PutStr(LS(MSG_DATA_ARGUMENT_REQUIRED, "'DATA' argument required "
-		"in this operation mode.\n"));
+		else PutStr(Ls[MSG_DATA_ARGUMENT_REQUIRED]);
 	}
 }
 
@@ -48,7 +47,7 @@ bool ChunkExtractor::ChunkWork(ContextNode *cn)
 
 		FreeMem(copybuf, COPYBUF_SIZE);
 	}
-	else success = Problem(LS(MSG_OUT_OF_MEMORY, "Out of memory"));
+	else success = Problem(Ls[MSG_OUT_OF_MEMORY]);
 
 	return success;
 }
