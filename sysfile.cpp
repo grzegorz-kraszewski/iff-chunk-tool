@@ -16,7 +16,8 @@ bool SysFile::SfProblem()
 		Fault(error, "", faultBuffer, 128);
 		Printf("\"%s\": %s.\n", filename, &faultBuffer[2]);
 	}
-	else Printf("\"%s\": unexpected end of file.\n", filename);
+	else Printf(LS(MSG_UNEXPECTED_END_OF_FILE, "\"%s\": unexpected end of "
+	"file.\n"), filename);
 
 	return FALSE;
 }

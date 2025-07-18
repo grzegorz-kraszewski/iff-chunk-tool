@@ -108,7 +108,7 @@ uint32 ValidateChunkID(const char *str)
 			if (GoodID(id)) return id;
 		}
 		else Printf(LS(MSG_INVALID_CHUNK_ID, "'%s' is not a valid IFF chunk "
-			"identifier.\n"), str);
+		"identifier.\n"), str);
 	}
 	else PutStr(LS(MSG_CHUNK_ARGUMENT_REQUIRED, "'CHUNK' argument is required "
 	"for this operation mode.\n"));
@@ -134,9 +134,10 @@ uint32 ValidateTypeID(const char *str)
 			if (GoodType(id)) return id;
 		}
 		else Printf(LS(MSG_INVALID_CHUNK_ID, "'%s' is not a valid IFF type "
-			"identifier.\n"), str);
+		"identifier.\n"), str);
 	}
-	else PutStr("IFF type is required in this operation mode.\n");
+	else PutStr(LS(MSG_IFF_TYPE_ARGUMENT_REQUIRED, "IFF type is required for "
+	"this operation mode.\n"));
 
 	return 0;
 }
