@@ -162,43 +162,36 @@ ChunkCopier::~ChunkCopier()
 
 bool ChunkCopier::CopyChunk(ContextNode *cn)
 {
-	int32 iffError, bytesToCopy;
+	int32 error;
 	bool success = TRUE;
 
-	iffError = PushChunk(destination->GetIff(), cn->cn_Type, cn->cn_ID, cn->cn_Size);
+	error = PushChunk(destination->GetIff(), cn->cn_Type, cn->cn_ID, cn->cn_Size);
 
-	#warning Copy loop is badly defined
-
-	if (iffError == 0)
+	if (error == 0)
 	{
-		bytesToCopy = cn->cn_Size;
-
-		while (success && (bytesToCopy > 0))
+		while (success)
 		{
-			int32 blocksize = bytesToCopy;
+			int32 bytesRead = ReadChunkBytes(iff, copyBuffer, COPYBUF_SIZE);
 
-			if (blocksize > COPYBUF_SIZE) blocksize = COPYBUF_SIZE;
-			iffError = ReadChunkBytes(iff, copyBuffer, blocksize);
-
-			if (iffError >= 0)
+			if (bytesRead > 0)
 			{
-				iffError = WriteChunkBytes(destination->GetIff(), copyBuffer, blocksize);
-				if (iffError >= 0) bytesToCopy -= blocksize;
-				else success = destination->IFFProblem(iffError);
+				error = WriteChunkBytes(destination->GetIff(), copyBuffer, bytesRead);
+				if (error < 0) success = destination->IFFProblem(error);
 			}
-			else success = IFFProblem(iffError);
+			else if (bytesRead == 0) break;
+			else success = IFFProblem(bytesRead);
 		}
 
-		iffError = PopChunk(destination->GetIff());
+		error = PopChunk(destination->GetIff());
 
 		//-------------------------------------------------------------------
 		// If read or write failed (success == FALSE), successful PopChunk()
 		// should not set 'success' to TRUE.
 		//-------------------------------------------------------------------
 
-		if (success && (iffError < 0)) success = destination->IFFProblem(iffError);
+		if (success && (error < 0)) success = destination->IFFProblem(error);
 	}
-	else success = destination->IFFProblem(iffError);
+	else success = destination->IFFProblem(error);
 
 	return success;
 }
