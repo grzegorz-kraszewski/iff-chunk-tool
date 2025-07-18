@@ -103,5 +103,8 @@ static inline const char* LS(int32 id, const char* defstr)
 #define MSG_CHUNK_NOT_FOUND_IN_SOURCE           7
 #define MSG_BOTH_STRING_AND_FILE_SPECIFIED      8
 #define MSG_NO_CHUNK_CONTENT_SPECIFIED          9
+#define MSG_ERR_TEMP_FILE_RENAME               10
+#define MSG_DELETE_SOURCE_BEFORE_RENAME        11
+#define MSG_UNKNOWN_OPERATION_MODE             12
 
 #endif    /* IFFCHUNKTOOL_MAIN_H */

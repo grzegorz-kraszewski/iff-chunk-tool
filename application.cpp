@@ -43,9 +43,11 @@ void Application::TempFileToSource()
 	if (DeleteFile(arguments.getString(ARG_FROM)))
 	{
 		if (Rename(builder.Path(), arguments.getString(ARG_FROM))) {}
-		else SysProblem("Can't rename temporary file to source name");
+		else SysProblem(LS(MSG_ERR_TEMP_FILE_RENAME, "Can't rename temporary "
+		"file to source name"));
 	}
-	else SysProblem("Can't delete source file");
+	else SysProblem(LS(MSG_DELETE_SOURCE_BEFORE_RENAME, "Can't delete source "
+	"file"));
 }
 
 //=============================================================================
@@ -106,7 +108,8 @@ bool Application::Process()
 		result = CreateEmptyIFF(arguments.getString(ARG_FROM),
 		 arguments.getString(ARG_CHUNK));
 	}
-	else Printf("Unknown operation mode '%s'.\n", mode);
+	else Printf(LS(MSG_UNKNOWN_OPERATION_MODE, "Unknown operation mode "
+	"'%s'.\n"), mode);
 
 	if (processor)
 	{
