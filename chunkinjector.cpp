@@ -33,7 +33,7 @@ ChunkInjector::ChunkInjector(const char *sourceName, const char *destName,
 			}
 		}
 		else PutStr(LS(MSG_CHUNK_ARGUMENT_REQUIRED, "CHUNK argument is "
-		"required in this operation mode.\n"));
+		"required for this operation mode.\n"));
 	}
 }
 

@@ -19,5 +19,5 @@ class ChunkReplacer : public ChunkCopier
 	 *chunk, ChunkDataSource *data);
 	virtual bool PreChunkWork(ContextNode *cn);
 	virtual bool FormEndWork();
-	virtual ~ChunkReplacer() { DD("ChunkReplacer"); }
+	virtual ~ChunkReplacer() {}
 };

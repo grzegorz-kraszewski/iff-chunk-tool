@@ -35,7 +35,8 @@ bool ChunkPicker::Parse()
 		{
 			char idbuf[6];
 
-			Printf("Chunk '%s' not found.\n", IDtoStr(chunkId, idbuf));
+			Printf(LS(MSG_CHUNK_NOT_FOUND_IN_SOURCE, "Chunk '%s' not "
+			"found.\n"), IDtoStr(chunkId, idbuf));
 		}
 	}
 	else result = IFFProblem(error);

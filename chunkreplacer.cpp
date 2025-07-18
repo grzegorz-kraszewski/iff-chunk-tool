@@ -8,8 +8,6 @@ ChunkReplacer::ChunkReplacer(const char *sourceName, const char *destName,
  const char *chunk, ChunkDataSource *data) : ChunkCopier(sourceName, destName),
  data(data), found(FALSE)
 {
-	DC("ChunkReplacer");
-
 	if (ready)
 	{
 		ready = FALSE;
@@ -46,7 +44,8 @@ bool ChunkReplacer::FormEndWork()
 
 	if (!found)
 	{
-		Printf("Chunk '%s' not found, replace failed.\n", IDtoStr(chunkId, buf));
+		Printf(LS(MSG_CHUNK_NOT_FOUND_IN_SOURCE, "Chunk '%s' not found.\n"),
+		 IDtoStr(chunkId, buf));
 		return FALSE;
 	}
 	else return TRUE;
