@@ -9,30 +9,23 @@
 // ChunkDataFile::CopyData()
 //=============================================================================
 
-bool ChunkDataFile::CopyData(IFFWriter *dest)
+bool ChunkDataFile::CopyData(IFFWriter *dest, void *buffer)
 {
 	bool success = TRUE;
 	int32 bytesread, error;
-	void *copybuf;
 
-	if (copybuf = AllocMem(COPYBUF_SIZE, MEMF_ANY))
+	while (success)
 	{
-		while (success)
+		bytesread = source.SfRead(buffer, COPYBUF_SIZE);
+
+		if (bytesread > 0)
 		{
-			bytesread = source.SfRead(copybuf, COPYBUF_SIZE);
-
-			if (bytesread > 0)
-			{
-				error = WriteChunkBytes(dest->GetIff(), copybuf, bytesread);
-				if (error < 0) success = dest->IFFProblem(error);
-			}
-			else if (bytesread == 0) break;
-			else success = source.SfProblem();
+			error = WriteChunkBytes(dest->GetIff(), buffer, bytesread);
+			if (error < 0) success = dest->IFFProblem(error);
 		}
-
-		FreeMem(copybuf, COPYBUF_SIZE);
+		else if (bytesread == 0) break;
+		else success = source.SfProblem();
 	}
-	else success = Problem(Ls[MSG_OUT_OF_MEMORY]);
 
 	return success;
 }
@@ -55,7 +48,7 @@ ChunkDataString::ChunkDataString(char *string) : string((uint8*)string)
 // ChunkDataString::CopyData()
 //=============================================================================
 
-bool ChunkDataString::CopyData(IFFWriter *dest)
+bool ChunkDataString::CopyData(IFFWriter *dest, void *buffer)
 {
 	int32 error;
 
@@ -264,8 +257,7 @@ bool ChunkCopier::PushChunkFromDataSource(uint32 chunkid, ChunkDataSource
 	if (!(error = PushChunk(destination->GetIff(), iffType, chunkid,
 	 IFFSIZE_UNKNOWN)))
 	{
-		#warning ChunkCopier can provide its own copy buffer
-		success = source->CopyData(destination);
+		success = source->CopyData(destination, copyBuffer);
 		error = PopChunk(destination->GetIff());
 
 		if (success && (error < 0))

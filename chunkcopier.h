@@ -29,7 +29,7 @@ class ChunkDataSource
 
 	bool ready;
 	ChunkDataSource() : ready(FALSE) {}
-	virtual bool CopyData(IFFWriter *dest) = 0;
+	virtual bool CopyData(IFFWriter *dest, void *buffer) = 0;
 	virtual ~ChunkDataSource() {}
 };
 
@@ -42,7 +42,7 @@ class ChunkDataFile : public ChunkDataSource
 
 	ChunkDataFile(const char *filepath) : source(filepath, MODE_OLDFILE)
 		{ ready = source.ready; }
-	virtual bool CopyData(IFFWriter *dest);
+	virtual bool CopyData(IFFWriter *dest, void *buffer);
 	virtual ~ChunkDataFile() {}
 };
 
@@ -56,7 +56,7 @@ class ChunkDataString : public ChunkDataSource
 	public:
 
 	ChunkDataString(char *string);
-	virtual bool CopyData(IFFWriter *dest);
+	virtual bool CopyData(IFFWriter *dest, void *buffer);
 	virtual ~ChunkDataString() {}
 };
 
