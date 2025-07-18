@@ -162,7 +162,7 @@ ChunkDataSource* Application::PrepareDataSource()
 }
 
 //=============================================================================
-// Application::PrepareEmptyIFF()
+// Application::CreateEmptyIFF()
 //=============================================================================
 
 bool Application::CreateEmptyIFF(const char *filePath, const char *typeString)
