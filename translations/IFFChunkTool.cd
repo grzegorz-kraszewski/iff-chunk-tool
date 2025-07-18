@@ -1,0 +1,89 @@
+; IFFChunkTool
+;
+MSG_NO_IFFPARSE_LIBRARY (//76)
+Can't open iffparse.library v39+
+;
+MSG_NO_UTILITY_LIBRARY (//76)
+Can't open utility.library v39+
+;
+MSG_COMMANDLINE_ARGS (//38)
+Program arguments error
+;
+MSG_OUT_OF_MEMORY (//76)
+Out of memory
+;
+MSG_INVALID_CHUNK_ID (//76)
+'%s' is not a valid IFF chunk identifier.\n
+;
+MSG_CHUNK_NOT_FOUND_IN_SOURCE (//76)
+Chunk '%s' not found.\n
+;
+MSG_BOTH_STRING_AND_FILE_SPECIFIED (//76)
+Specify either string or file as chunk contents, not both
+;
+MSG_NO_CHUNK_CONTENT_SPECIFIED (//76)
+Specify string or file as chunk contents
+;
+MSG_ERR_TEMP_FILE_RENAME (//76)
+Can't rename temporary file to source name
+;
+MSG_DELETE_SOURCE_BEFORE_RENAME (//76)
+Can't delete source file
+;
+MSG_UNKNOWN_OPERATION_MODE (//38)
+Unknown operation mode '%s'.\n
+;
+MSG_BROKEN_ESCAPE_SEQUENCE (//76)
+Broken escape sequence in CONTENT string.\n
+;
+MSG_DATA_ARGUMENT_REQUIRED (//76)
+'DATA' argument required for this operation mode.\n
+;
+MSG_CHUNK_ARGUMENT_REQUIRED (//76)
+'CHUNK' argument required for this operation mode.\n
+;
+MSG_IFF_FILE_IS_NOT_FORM (//76)
+IFF file is not FORM
+;
+MSG_IFF_TYPE_ARGUMENT_REQUIRED (//76)
+IFF type is required for this operation mode.\n
+;
+MSG_UNEXPECTED_END_OF_FILE (//38)
+\"%s\": unexpected end of file.\n
+;
+MSG_IFFERR_UNEXPECTED_EOF (//38)
+unexpected end of file
+;
+MSG_IFFERR_UNEXPECTED_EOC (//38)
+unexpected end of IFF chunk
+;
+MSG_IFFERR_NO_PROPERTY_SCOPE (//38)
+IFF property without scope
+;
+MSG_IFFERR_OUT_OF_MEMORY (//38)
+out of memory
+;
+MSG_IFFERR_FILE_READ (//38)
+file read error
+;
+MSG_IFFERR_FILE_WRITE (//38)
+file write error
+;
+MSG_IFFERR_FILE_SEEK (//38)
+file seek error
+;
+MSG_IFFERR_DATA_CORRUPTED (//38)
+file data corrupt
+;
+MSG_IFFERR_SYNTAX (//38)
+IFF syntax error
+;
+MSG_IFFERR_NOT_IFF_FILE (//38)
+not an IFF file
+;
+MSG_IFFERR_UNKNOWN (//38)
+\"%s\": unknown IFF error %ld.\n
+;
+MSG_INVALID_TYPE_ID (//57)
+'%s' is not a valid IFF type identifier.\n
+;

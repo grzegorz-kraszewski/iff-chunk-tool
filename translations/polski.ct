@@ -1,0 +1,120 @@
+## version $VER: IFFChunkTool.catalog 1.0 (18.07.2025)
+## codeset 0
+## language polski
+;
+MSG_NO_IFFPARSE_LIBRARY
+Nie mogê otworzyæ biblioteki iffparse.library v39+
+; Can't open iffparse.library v39+
+;
+MSG_NO_UTILITY_LIBRARY
+Nie mogê otworzyæ biblioteki utility.library v39+
+; Can't open utility.library v39+
+;
+MSG_COMMANDLINE_ARGS
+B³±d argumentów
+; Program arguments error
+;
+MSG_OUT_OF_MEMORY
+Brak pamiêci
+; Out of memory
+;
+MSG_INVALID_CHUNK_ID
+'%s' nie jest prawid³owym identyfikatorem chunka IFF.\n
+; '%s' is not a valid IFF chunk identifier.\n
+;
+MSG_CHUNK_NOT_FOUND_IN_SOURCE
+Nie znaleziono chunka '%s'.\n
+; Chunk '%s' not found.\n
+;
+MSG_BOTH_STRING_AND_FILE_SPECIFIED
+Podaj albo tekst albo plik jako zawarto¶æ chunka, ale nie oba
+; Specify either string or file as chunk contents, not both
+;
+MSG_NO_CHUNK_CONTENT_SPECIFIED
+Podaj tekst albo plik jako zawarto¶æ chunka
+; Specify string or file as chunk contents
+;
+MSG_ERR_TEMP_FILE_RENAME
+Nie mogê zmieniæ nazwy pliku tymczasowego na ¼ród³owy
+; Can't rename temporary file to source name
+;
+MSG_DELETE_SOURCE_BEFORE_RENAME
+Nie mogê skasowaæ pliku ¼ród³owego
+; Can't delete source file
+;
+MSG_UNKNOWN_OPERATION_MODE
+Nieznany tryb pracy '%s'.\n
+; Unknown operation mode '%s'.\n
+;
+MSG_BROKEN_ESCAPE_SEQUENCE
+B³êdna sekwencja ze znakiem procenta w tek¶cie chunka.\n
+; Broken escape sequence in CONTENT string.\n
+;
+MSG_DATA_ARGUMENT_REQUIRED
+W tym trybie pracy argument 'DATA' jest wymagany.\n
+; 'DATA' argument required for this operation mode.\n
+;
+MSG_CHUNK_ARGUMENT_REQUIRED
+W tym trybie pracy argument 'CHUNK' jest wymagany.\n
+; 'CHUNK' argument required for this operation mode.\n
+;
+MSG_IFF_FILE_IS_NOT_FORM
+Plik IFF nie jest typu FORM
+; IFF file is not FORM
+;
+MSG_IFF_TYPE_ARGUMENT_REQUIRED
+W tym trybie pracy nale¿y podaæ typ pliku IFF.\n
+; IFF type is required for this operation mode.\n
+;
+MSG_UNEXPECTED_END_OF_FILE
+\"%s\": nieoczekiwany koniec pliku.\n
+; \"%s\": unexpected end of file.\n
+;
+MSG_IFFERR_UNEXPECTED_EOF
+nieoczekiwany koniec pliku
+; unexpected end of file
+;
+MSG_IFFERR_UNEXPECTED_EOC
+nieoczekiwany koniec chunka
+; unexpected end of IFF chunk
+;
+MSG_IFFERR_NO_PROPERTY_SCOPE
+chunk w³a¶ciwo¶ci IFF poza zasiêgiem
+; IFF property without scope
+;
+MSG_IFFERR_OUT_OF_MEMORY
+brak pamiêci
+; out of memory
+;
+MSG_IFFERR_FILE_READ
+b³±d odczytu pliku
+; file read error
+;
+MSG_IFFERR_FILE_WRITE
+b³±d zapisu pliku
+; file write error
+;
+MSG_IFFERR_FILE_SEEK
+b³±d zmiany pozycji w pliku
+; file seek error
+;
+MSG_IFFERR_DATA_CORRUPTED
+plik uszkodzony
+; file data corrupt
+;
+MSG_IFFERR_SYNTAX
+b³êdna struktura pliku IFF
+; IFF syntax error
+;
+MSG_IFFERR_NOT_IFF_FILE
+to nie jest plik IFF
+; not an IFF file
+;
+MSG_IFFERR_UNKNOWN
+\"%s\": nieznany b³±d IFF numer %ld.\n
+; \"%s\": unknown IFF error %ld.\n
+;
+MSG_INVALID_TYPE_ID
+'%s' nie jest prawid³owym typem IFF.\n
+; '%s' is not a valid IFF type identifier.\n
+;
