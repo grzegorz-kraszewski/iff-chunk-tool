@@ -24,12 +24,12 @@
 
 const char* Application::PrepareDestination()
 {
-	const char *destination = arguments.getString(ARG_TO);
+	const char *destination = arguments[ARG_TO];
 
 	if (destination) return destination;
 
 	inPlace = TRUE;
-	builder.AddPathPart(arguments.getString(ARG_FROM));
+	builder.AddPathPart(arguments[ARG_FROM]);
 	builder.StripFileName();
 	builder.AddPathPart("iffchunktool.temp");
 	return builder.Path();
@@ -41,9 +41,9 @@ const char* Application::PrepareDestination()
 
 void Application::TempFileToSource()
 {
-	if (DeleteFile(arguments.getString(ARG_FROM)))
+	if (DeleteFile(arguments[ARG_FROM]))
 	{
-		if (Rename(builder.Path(), arguments.getString(ARG_FROM))) {}
+		if (Rename(builder.Path(), arguments[ARG_FROM])) {}
 		else SysProblem(Ls[MSG_ERR_TEMP_FILE_RENAME]);
 	}
 	else SysProblem(Ls[MSG_DELETE_SOURCE_BEFORE_RENAME]);
@@ -55,9 +55,9 @@ void Application::TempFileToSource()
 
 bool Application::Process()
 {
-	const char *mode = arguments.getString(ARG_MODE);
-	const char *source = arguments.getString(ARG_FROM);
-	const char *destination = arguments.getString(ARG_TO);
+	const char *mode = arguments[ARG_MODE];
+	const char *source = arguments[ARG_FROM];
+	const char *destination = arguments[ARG_TO];
 	bool result = FALSE;
 	IFFReader *processor = NULL;
 	ChunkDataSource *data = NULL;
@@ -66,24 +66,24 @@ bool Application::Process()
 	{
 		destination = PrepareDestination();
 		data = PrepareDataSource();
-		processor = new ChunkAdder(source, destination,
-		 arguments.getString(ARG_CHUNK), data);
+		processor = new ChunkAdder(source, destination, arguments[ARG_CHUNK],
+		 data);
 	}
 	else if (Stricmp(mode, "DUMP") == 0)
 	{
-		processor = new ChunkDumper(source, arguments.getString(ARG_CHUNK));
+		processor = new ChunkDumper(source, arguments[ARG_CHUNK]);
 	}
 	else if (Stricmp(mode, "EXTRACT") == 0)
 	{
-		processor = new ChunkExtractor(source, arguments.getString(ARG_CHUNK),
-			arguments.getString(ARG_DATAFILE));
+		processor = new ChunkExtractor(source, arguments[ARG_CHUNK],
+		 arguments[ARG_DATAFILE]);
 	}
 	else if (Stricmp(mode, "INSERT") == 0)
 	{
 		destination = PrepareDestination();
 		data = PrepareDataSource();
 		processor = new ChunkInjector(source, destination,
-		 arguments.getString(ARG_CHUNK), data, arguments.getString(ARG_AFTER));
+		 arguments[ARG_CHUNK], data, arguments[ARG_AFTER]);
 	}
 	else if (Stricmp(mode, "LIST") == 0)
 	{
@@ -93,19 +93,18 @@ bool Application::Process()
 	{
 		destination = PrepareDestination();
 		processor = new ChunkRemover(source, destination,
-		 arguments.getString(ARG_CHUNK));
+		 arguments[ARG_CHUNK]);
 	}
 	else if (Stricmp(mode, "REPLACE") == 0)
 	{
 		destination = PrepareDestination();
 		data = PrepareDataSource();
 		processor = new ChunkReplacer(source, destination,
-		 arguments.getString(ARG_CHUNK), data);
+		 arguments[ARG_CHUNK], data);
 	}
 	else if (Stricmp(mode, "NEW") == 0)
 	{
-		result = CreateEmptyIFF(arguments.getString(ARG_FROM),
-		 arguments.getString(ARG_CHUNK));
+		result = CreateEmptyIFF(arguments[ARG_FROM], arguments[ARG_CHUNK]);
 	}
 	else Printf(Ls[MSG_UNKNOWN_OPERATION_MODE], mode);
 
@@ -133,8 +132,8 @@ ChunkDataSource* Application::PrepareDataSource()
 	const char *path;
 	ChunkDataSource *data = NULL;
 
-	str = (char*)arguments.getString(ARG_CONTENTS);
-	path = arguments.getString(ARG_DATAFILE);
+	str = (char*)arguments[ARG_CONTENTS];
+	path = arguments[ARG_DATAFILE];
 
 	if (str)
 	{

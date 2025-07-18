@@ -27,5 +27,5 @@ class CallArgs
 	bool ready;
 	CallArgs();
 	~CallArgs();
-	const char* getString(int32 index) { return (const char*)vals[index]; }
+	const char* operator[](int32 index) const { return (const char*)vals[index]; }
 };
