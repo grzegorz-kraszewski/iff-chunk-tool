@@ -13,6 +13,14 @@ APTR TaskPool = NULL;
 
 extern ULONG Main(WBStartup *wbmsg);
 
+// #define HAVE_GLOBAL_CONSTRUCTORS
+
+#ifdef HAVE_GLOBAL_CONSTRUCTORS
+extern void (*__CTOR_LIST__[])(void);
+extern void (*__DTOR_LIST__[])(void);
+void GlobalConstructors();
+void GlobalDestructors();
+#endif
 
 __saveds ULONG Start(void)
 {
@@ -38,7 +46,13 @@ __saveds ULONG Start(void)
 	{
 		if (TaskPool = CreatePool(MEMF_ANY, 4096, 2048))
 		{
+			#ifdef HAVE_GLOBAL_CONSTRUCTORS
+			GlobalConstructors();
+			#endif
 			result = Main(wbmsg);
+			#ifdef HAVE_GLOBAL_CONSTRUCTORS
+			GlobalDestructors();
+			#endif
 			DeletePool(TaskPool);
 		}
 
@@ -92,3 +106,18 @@ void operator delete[](APTR memory)
 {
 	operator delete(memory);
 }
+
+#ifdef HAVE_GLOBAL_CONSTRUCTORS
+void GlobalConstructors()
+{
+	for (long i = (long)__CTOR_LIST__[0]; i > 0; i--) __CTOR_LIST__[i](); 
+}
+
+
+void GlobalDestructors()
+{
+	void (**dtor)(void) = __DTOR_LIST__;
+
+	while (*(++dtor)) (*dtor)();
+}
+#endif
