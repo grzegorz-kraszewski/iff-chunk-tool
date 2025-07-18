@@ -11,8 +11,6 @@ ChunkInjector::ChunkInjector(const char *sourceName, const char *destName,
  ChunkCopier(sourceName, destName), chunkId(0), chunkAfter(0), found(FALSE),
  data(data)
 {
-	DC("ChunkInjector");
-
 	if (ready)
 	{
 		ready = FALSE;
@@ -34,7 +32,8 @@ ChunkInjector::ChunkInjector(const char *sourceName, const char *destName,
 				}
 			}
 		}
-		else PutStr("CHUNK argument is required in this operation mode.\n");
+		else PutStr(LS(MSG_CHUNK_ARGUMENT_REQUIRED, "CHUNK argument is "
+		"required in this operation mode.\n"));
 	}
 }
 
@@ -76,8 +75,8 @@ bool ChunkInjector::FormEndWork()
 
 	if (!found)
 	{
-		Printf("Chunk '%s' not found, insert failed.\n", IDtoStr(chunkAfter,
-		 buf));
+		Printf(LS(MSG_CHUNK_NOT_FOUND_IN_SOURCE, "Chunk '%s' not found.\n"),
+		 IDtoStr(chunkAfter, buf));
 		return FALSE;
 	}
 	else return TRUE;
