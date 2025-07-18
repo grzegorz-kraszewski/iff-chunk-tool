@@ -1,3 +1,4 @@
+#include "locale.h"
 #include "chunkpicker.h"
 
 #include <proto/dos.h>

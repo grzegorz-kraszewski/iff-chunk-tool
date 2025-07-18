@@ -2,6 +2,7 @@
 // IFFChunkTool
 //==============
 
+#include "locale.h"
 #include "iffreader.h"
 
 #include <proto/iffparse.h>

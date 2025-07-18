@@ -1,3 +1,4 @@
+#include "locale.h"
 #include "chunkcopier.h"
 #include "sysfile.h"
 

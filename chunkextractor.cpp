@@ -1,3 +1,4 @@
+#include "locale.h"
 #include "chunkextractor.h"
 
 #include <proto/exec.h>

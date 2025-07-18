@@ -81,36 +81,4 @@ void FmtPut(char *dest, const char *fmt, int32 arg1, ...);
 int32 Problem(const char *msg);
 int32 SysProblem(const char *msg);
 
-//===============
-// locale stuff
-//===============
-
-extern Library *LocaleBase;
-extern Catalog *Cat;
-
-static inline const char* LS(int32 id, const char* defstr)
-{
-	return (Cat ? GetCatalogStr(Cat, id, defstr) : defstr);
-}
-
-#define MSG_NO_IFFPARSE_LIBRARY                 0
-#define MSG_NO_UTILITY_LIBRARY                  1
-#define MSG_COMMANDLINE_ARGS                    2
-#define MSG_OUT_OF_MEMORY                       3
-#define MSG_ARGS_UNKNOWN_MODE                   4
-#define MSG_INVALID_CHUNK_ID                    5
-#define MSG_NO_OUTPUT_DATAFILE                  6
-#define MSG_CHUNK_NOT_FOUND_IN_SOURCE           7
-#define MSG_BOTH_STRING_AND_FILE_SPECIFIED      8
-#define MSG_NO_CHUNK_CONTENT_SPECIFIED          9
-#define MSG_ERR_TEMP_FILE_RENAME               10
-#define MSG_DELETE_SOURCE_BEFORE_RENAME        11
-#define MSG_UNKNOWN_OPERATION_MODE             12
-#define MSG_BROKEN_ESCAPE_SEQUENCE             13
-#define MSG_DATA_ARGUMENT_REQUIRED             14
-#define MSG_CHUNK_ARGUMENT_REQUIRED            15
-#define MSG_IFF_FILE_IS_NOT_FORM               16
-#define MSG_IFF_TYPE_ARGUMENT_REQUIRED         17
-#define MSG_UNEXPECTED_END_OF_FILE             18
-
 #endif    /* IFFCHUNKTOOL_MAIN_H */

@@ -5,6 +5,7 @@
 #include <proto/dos.h>
 
 #include "main.h"
+#include "locale.h"
 #include "callargs.h"
 
 //=============================================================================

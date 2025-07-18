@@ -1,4 +1,5 @@
 #include "chunkreplacer.h"
+#include "locale.h"
 
 //=============================================================================
 // ChunkReplacer::ChunkReplacer()

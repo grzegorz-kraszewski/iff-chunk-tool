@@ -1,4 +1,5 @@
 #include "chunkinjector.h"
+#include "locale.h"
 
 #include <proto/dos.h>
 

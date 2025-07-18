@@ -6,6 +6,7 @@
 #include <workbench/startup.h>
 
 #include "main.h"
+#include "locale.h"
 #include "application.h"
 
 

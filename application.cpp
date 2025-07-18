@@ -3,6 +3,7 @@
 //==============
 
 #include "main.h"
+#include "locale.h"
 #include "application.h"
 #include "chunklister.h"
 #include "chunkextractor.h"
