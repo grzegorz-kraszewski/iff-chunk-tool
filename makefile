@@ -5,7 +5,7 @@ CFLAGS = -nostdlib -O2 -fbaserel -fomit-frame-pointer -mregparm -fno-exceptions 
 # CFLAGS += -DDEBUG
 LDFLAGS = -nostdlib -fbaserel -fomit-frame-pointer -nostartfiles
 LIBS =
-OBJS = start.o main.o callargs.o application.o ifffile.o iffreader.o iffwriter.o chunklister.o chunkpicker.o chunkextractor.o chunkdumper.o chunkcopier.o chunkremover.o chunkadder.o chunkreplacer.o chunkinjector.o sysfile.o pathbuilder.o locale.o
+OBJS = start.o main.o callargs.o application.o ifffile.o iffreader.o iffwriter.o chunklister.o chunkpicker.o chunkextractor.o chunkdumper.o chunkcopier.o chunkremover.o chunkadder.o chunkreplacer.o chunkinjector.o sysfile.o pathbuilder.o locale.o extchunkid.o
 EXE = IFFChunkTool
 TRANSLATIONS := $(wildcard translations/*.ct)
 LANGUAGES := $(basename $(notdir $(TRANSLATIONS)))
@@ -66,4 +66,4 @@ chunkinjector.o: chunkinjector.cpp chunkinjector.h chunkcopier.h main.h iffreade
 sysfile.o: sysfile.cpp sysfile.h main.h locale.h
 pathbuilder.o: pathbuilder.cpp pathbuilder.h main.h
 locale.o: locale.cpp locale.h main.h
-
+extchunkid.o: extchunkid.cpp extchunkid.h
