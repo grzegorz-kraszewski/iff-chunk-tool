@@ -69,7 +69,7 @@ __saveds ULONG Start(void)
 }
 
 
-__attribute__((section(".text"))) UBYTE VString[] = "$VER: IFFChunkTool 1.0 (18.07.2025)\r\n";
+__attribute__((section(".text"))) UBYTE VString[] = "$VER: IFFChunkTool 1.1 (22.07.2025)\r\n";
 
 
 
