@@ -73,20 +73,19 @@ class ChunkCopier : public IFFReader
 
 	protected:
 
-	uint32 chunkId;
 	bool copyThisChunk;      // subclasses can use this flag to skip a chunk when copying
-	bool chunkFound;
+	bool chunkFound;         // subclasses can use it for error reporting
 	bool PushChunkFromDataSource(uint32 chunkid, ChunkDataSource *source);
 
 	public:
 
-	ChunkCopier(const char *sourceName, const char *destName);
+	ChunkCopier(const char *source, const char *dest);
 	~ChunkCopier();
 	bool Parse();
 	virtual bool FormStartWork() {}
 	virtual bool PreChunkWork(ContextNode *cn) {}
 	virtual bool PostChunkWork(ContextNode *cn) {}
-	virtual bool FormEndWork();
+	virtual bool FormEndWork() {};
 };
 
 #endif     // IFFCHUNKTOOL_CHUNKCOPIER_H

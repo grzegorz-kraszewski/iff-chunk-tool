@@ -5,11 +5,13 @@
 //=============================================================================
 
 #include "chunkcopier.h"
-
+#include "extchunkid.h"
 
 class ChunkInjector : public ChunkCopier
 {
-	uint32 chunkAfter;
+	uint32 injectedChunk;
+	ExtendedChunkID chunkAfter;
+	int32 chunkCounter;
 	ChunkDataSource *data;
 
 	public:

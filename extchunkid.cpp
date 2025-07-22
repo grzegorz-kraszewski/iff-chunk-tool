@@ -62,7 +62,7 @@ ExtendedChunkID::ExtendedChunkID(const char *id) :
 		else chunkId = 0;
 	}
 
-	if (!chunkId) Printf("'%s' is not a valid chunk identifier (ECI).\n", id);
+	if (!chunkId) Printf("'%s' is not a valid chunk identifier.\n", id);
 }
 
 //=============================================================================
