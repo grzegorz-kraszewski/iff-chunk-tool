@@ -22,6 +22,7 @@ In modes where some new contents is added to an IFF file, it may be loaded from 
  @{" Summary of commandline arguments " LINK arguments}
  @{" Escape sequences in text chunk contents " LINK escape}
  @{" String termination in IFF files " LINK termination}
+ @{" Multiple chunks with the same ID " LINK multiple}
 
 IFFChunkTool operates only on flat IFF files (FORM type, no nested FORMs). LISTs and CATs are rejected.
 
@@ -167,4 +168,21 @@ IFFChunkTool does not implicitly add zero terminator, when chunk contents is spe
 "This string will be zero-terminated in a chunk.\\00"
 
 Terminating zero byte will be listed in DUMP mode and saved to a file in EXTRACT mode.
+@ENDNODE
+@NODE multiple "IFFChunkTool : Multiple Chunks With The Same ID"
+@{B}Multiple Chunks With The Same ID@{UB}
+
+There are IFF files containing multiple chunks with the same ID. For example system preferences file "font.prefs" contains three 'FONT' chunks. IFFChunkTool handles such chunks by adding numbers to them after a dot. Numbering starts from 0. Listing of example "font.prefs" file looks like this:
+
+FORM PREF 510
+PRHD 6
+FONT.0 156
+FONT.1 156
+FONT.2 156
+
+To operate on given 'FONT' chunk just use the ID with number. Let's insert 'ABCD' chunk after the second 'FONT':
+
+IFFChunkTool font.prefs INSERT ABCD "hohoho" AFTER FONT.1 TO modified.prefs
+
+Using identifier without a number always means chunk 0 (the first one).
 @ENDNODE
