@@ -91,12 +91,29 @@ bool ChunkLister::ScanChunks()
 // ChunkLister::SetChunkNumbers()
 //-----------------------------------------------------------------------------
 // The method processes the list of chunks. For multiple chunks with the same 
-// ID it numbers these chunks and sets their 'showNumber' to TRUE.
+// ID it numbers these chunks and sets their 'showNumber' to TRUE. 
+// Implementation is O(n^2), precisely the worst case is n^2/2, where n is 
+// the number of chunks. On the other hand it does not require any temporary
+// container.
 //=============================================================================
 
 void ChunkLister::SetChunkNumbers()
 {
+	ChunkListEntry *f, *b;
 
+	for (f = chunks.first(); f; f = f->next())
+	{
+		for (b = f->prev(); b; b = b->prev())
+		{
+			if (b->extendedId.chunkId == f->extendedId.chunkId)
+			{
+				f->extendedId.number = b->extendedId.number + 1;
+				f->showNumber = TRUE;
+				b->showNumber = TRUE;
+				break;
+			}
+		}
+	}
 }
 
 //=============================================================================

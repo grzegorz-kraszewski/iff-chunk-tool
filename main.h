@@ -72,7 +72,7 @@ extern Library
 int32 StrLen(const char *s);
 uint32 ValidateChunkID(const char *s);
 uint32 ValidateTypeID(const char *s);
-void FmtPut(char *dest, const char *fmt, int32 arg1, ...);
+void FmtPut(char *dest, const char *fmt, ...);
 
 //=================
 // error reporting

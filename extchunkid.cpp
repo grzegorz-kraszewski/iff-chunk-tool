@@ -2,6 +2,7 @@
 
 #include <proto/iffparse.h>
 #include <proto/dos.h>
+#include <proto/exec.h>
 
 static bool StrToUInt32(const char *str, uint32 *value)
 {
@@ -30,7 +31,7 @@ static bool StrToUInt32(const char *str, uint32 *value)
 }
 
 //=============================================================================
-// ExtendedChunkID::ExtendedChunkID()
+// ExtendedChunkID::ExtendedChunkID(const char*)
 //=============================================================================
 
 ExtendedChunkID::ExtendedChunkID(const char *id) :
@@ -49,14 +50,31 @@ ExtendedChunkID::ExtendedChunkID(const char *id) :
 
 		if (GoodID(chunkId))
 		{
-			if ((length > 5) && (id[4] == '/'))
+			if (length > 4)
 			{
-				if (!StrToUInt32(&id[5], &number)) chunkId = 0;
+				if (id[4] == '.')
+				{
+					if (!StrToUInt32(&id[5], &number)) chunkId = 0;
+				}
+				else chunkId = 0;
 			}
-			else chunkId = 0;
 		}
 		else chunkId = 0;
 	}
 
-	if (!chunkId) Printf("'%s' is not a valid chunk identifier.\n", id);
+	if (!chunkId) Printf("'%s' is not a valid chunk identifier (ECI).\n", id);
+}
+
+//=============================================================================
+// ExtendedChunkID::ExtIDtoStr()
+//=============================================================================
+
+char* ExtendedChunkID::ExtIDtoStr(char *buf) const
+{
+	char buf2[5];
+
+	CopyMem(&chunkId, buf2, 4);
+	buf2[4] = 0x00;
+	FmtPut(buf, "%s.%ld", buf2, number);
+	return buf;
 }

@@ -9,11 +9,10 @@
 
 class ChunkListEntry : public RpNode<ChunkListEntry>
 {
-	ExtendedChunkID extendedId;
-	int32 chunkLength;
-
 	public:
 
+	ExtendedChunkID extendedId;
+	int32 chunkLength;
 	bool showNumber;
 
 	ChunkListEntry(uint32 chunkId, int32 chunkLength) : extendedId(chunkId),

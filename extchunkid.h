@@ -6,6 +6,9 @@
 // Notation is backwards compatible. Simply '<id>' means '<id>/0'.
 //=============================================================================
 
+#ifndef IFFCHUNKTOOL_EXTCHUNKID_H
+#define IFFCHUNKTOOL_EXTCHUNKID_H
+
 #include "main.h"
 
 class ExtendedChunkID
@@ -15,19 +18,16 @@ class ExtendedChunkID
 	uint32 chunkId;
 	uint32 number;
 
-	bool valid() const
-	{
-		return (chunkId != 0);
-	}
-
+	bool valid() const { return (chunkId != 0);	}
 	ExtendedChunkID() : chunkId(0), number(0) {}
-
 	ExtendedChunkID(uint32 chunkId) : chunkId(chunkId), number(0) {}
-
 	ExtendedChunkID(const char *id);
+	char* ExtIDtoStr(char *buf) const;
 
 	bool operator==(const ExtendedChunkID& b) const
 	{
 		return ((chunkId == b.chunkId) && (number == b.number));
 	}
 };
+
+#endif    // IFFCHUNKTOOL_EXTCHUNKID_H

@@ -9,13 +9,14 @@
 #define IFFCHUNKTOOL_CHUNKPICKER_H
 
 #include "main.h"
+#include "extchunkid.h"
 #include "iffreader.h"
 
 #include <libraries/iffparse.h>
 
 class ChunkPicker : public IFFReader
 {
-	uint32 chunkId;
+	ExtendedChunkID chunkId;
 
 	public:
 

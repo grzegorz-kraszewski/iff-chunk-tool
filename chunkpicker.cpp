@@ -8,13 +8,11 @@
 //=============================================================================
 
 ChunkPicker::ChunkPicker(const char *filepath, const char *chunkid) :
-	IFFReader(filepath)
+	IFFReader(filepath), chunkId(chunkid)
 {
 	if (ready)
 	{
-		ready = FALSE;
-		chunkId = ValidateChunkID(chunkid);
-		if (chunkId) ready = TRUE;
+		if (!chunkId.valid()) ready = FALSE;
 	}
 }
 
@@ -24,22 +22,36 @@ ChunkPicker::ChunkPicker(const char *filepath, const char *chunkid) :
 
 bool ChunkPicker::Parse()
 {
-	bool result = FALSE;
+	bool success = TRUE;
 	int32 error;
+	int32 chunkCounter = 0;
 
-	if (!(error = StopChunk(iff, iffType, chunkId)))
+	if (!(error = StopChunk(iff, iffType, chunkId.chunkId)))
 	{
-		error = ParseIFF(iff, IFFPARSE_SCAN);
-
-		if (!error) result = ChunkWork(CurrentChunk(iff));
-		else if (error == IFFERR_EOF)
+		while (success)
 		{
-			char idbuf[6];
+			error = ParseIFF(iff, IFFPARSE_SCAN);
 
-			Printf(Ls[MSG_CHUNK_NOT_FOUND_IN_SOURCE], IDtoStr(chunkId, idbuf));
+			if (!error)
+			{
+				if (chunkCounter++ == chunkId.number)
+				{
+					success = ChunkWork(CurrentChunk(iff));
+					break;
+				}
+			}
+			else if (error == IFFERR_EOF)
+			{
+				char idbuf[16];
+
+				Printf(Ls[MSG_CHUNK_NOT_FOUND_IN_SOURCE],
+				 chunkId.ExtIDtoStr(idbuf));
+
+				success = FALSE;
+			}
 		}
 	}
-	else result = IFFProblem(error);
+	else success = IFFProblem(error);
 
-	return result;
+	return success;
 }

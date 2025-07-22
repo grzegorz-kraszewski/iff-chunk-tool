@@ -147,8 +147,8 @@ void VFmtPut(char *dest, const char *fmt, int32 *args)
 }
 
 
-void FmtPut(char *dest, const char *fmt, int32 arg1, ...)
+void FmtPut(char *dest, const char *fmt, ...)
 {
-	int32 *_args = &arg1;
+	int32 *_args = ((int32*)&fmt) + 1;
 	VFmtPut(dest, fmt, _args);
 }
