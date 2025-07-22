@@ -10,15 +10,19 @@
 
 class ExtendedChunkID
 {
+	public:
+
 	uint32 chunkId;
 	uint32 number;
-
-	public:
 
 	bool valid() const
 	{
 		return (chunkId != 0);
 	}
+
+	ExtendedChunkID() : chunkId(0), number(0) {}
+
+	ExtendedChunkID(uint32 chunkId) : chunkId(chunkId), number(0) {}
 
 	ExtendedChunkID(const char *id);
 

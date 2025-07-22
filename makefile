@@ -50,20 +50,21 @@ purevirtual.o: purevirtual.c
 start.o: start.cpp
 main.o: main.cpp main.h locale.h application.h callargs.h chunkcopier.h iffreader.h ifffile.h iffwriter.h sysfile.h pathbuilder.h
 callargs.o: callargs.cpp main.h locale.h callargs.h
-application.o: application.cpp main.h locale.h application.h callargs.h chunkcopier.h iffreader.h ifffile.h iffwriter.h sysfile.h pathbuilder.h chunklister.h chunkextractor.h chunkpicker.h chunkdumper.h chunkremover.h chunkadder.h chunkreplacer.h chunkinjector.h
-ifffile.o: ifffile.cpp main.h ifffile.h
+application.o: application.cpp main.h locale.h application.h callargs.h chunkcopier.h iffreader.h ifffile.h iffwriter.h sysfile.h pathbuilder.h chunklister.h rplist.h chunkextractor.h chunkpicker.h chunkdumper.h chunkremover.h chunkadder.h chunkreplacer.h chunkinjector.h
+ifffile.o: ifffile.cpp main.h locale.h ifffile.h
 iffreader.o: iffreader.cpp locale.h main.h iffreader.h ifffile.h
 iffwriter.o: iffwriter.cpp iffwriter.h ifffile.h main.h
-chunklister.o: chunklister.cpp chunklister.h iffreader.h ifffile.h main.h
+chunklister.o: chunklister.cpp chunklister.h iffreader.h ifffile.h main.h rplist.h
 chunkpicker.o: chunkpicker.cpp locale.h main.h chunkpicker.h iffreader.h ifffile.h
 chunkextractor.o: chunkextractor.cpp locale.h main.h chunkextractor.h chunkpicker.h iffreader.h ifffile.h
 chunkdumper.o: chunkdumper.cpp chunkdumper.h main.h chunkpicker.h iffreader.h ifffile.h
 chunkcopier.o: chunkcopier.cpp locale.h main.h chunkcopier.h iffreader.h ifffile.h iffwriter.h sysfile.h
-chunkremover.o: chunkremover.cpp chunkremover.h chunkcopier.h main.h iffreader.h ifffile.h iffwriter.h sysfile.h
+chunkremover.o: chunkremover.cpp chunkremover.h chunkcopier.h main.h iffreader.h ifffile.h iffwriter.h sysfile.h locale.h
 chunkadder.o: chunkadder.cpp chunkadder.h chunkcopier.h main.h iffreader.h ifffile.h iffwriter.h sysfile.h
 chunkreplacer.o: chunkreplacer.cpp chunkreplacer.h chunkcopier.h main.h iffreader.h ifffile.h iffwriter.h sysfile.h locale.h
 chunkinjector.o: chunkinjector.cpp chunkinjector.h chunkcopier.h main.h iffreader.h ifffile.h iffwriter.h sysfile.h locale.h
 sysfile.o: sysfile.cpp sysfile.h main.h locale.h
 pathbuilder.o: pathbuilder.cpp pathbuilder.h main.h
 locale.o: locale.cpp locale.h main.h
-extchunkid.o: extchunkid.cpp extchunkid.h
+extchunkid.o: extchunkid.cpp extchunkid.h main.h
+
