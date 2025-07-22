@@ -39,8 +39,6 @@ const char *chunk, ChunkDataSource *data, const char *after) :
 
 bool ChunkInjector::FormStartWork()
 {
-	Printf("debug: chunkAfter $%08lx.%ld\n", chunkAfter.chunkId, chunkAfter.number);
-
 	if (!chunkAfter.valid())
 	{
 		chunkFound = TRUE;
