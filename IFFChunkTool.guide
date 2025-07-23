@@ -4,7 +4,7 @@
 @WORDWRAP
 @WIDTH 80
 @NODE Main "IFFChunkTool"
-@{B}IFFChunkTool 0.2@{UB}
+@{B}IFFChunkTool 1.1@{UB}
 
 IFFChunkTool is a tool for manipulating chunks in IFF files. It is a CLI tool with no graphic user interface. It is intended for automated processing for example in shell scripts and makefiles. IFFChunkTool can:
 
